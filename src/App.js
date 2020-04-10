@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 import Nav from './components/Nav';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
+import AccountsAPI from './components/AccountsAPI';
+
 import './App.css';
 
 class App extends Component {
@@ -105,9 +114,44 @@ class App extends Component {
             ? `Hello, ${this.state.username}`
             : 'Please Log In'}
         </h3>
+        <div>
+          {this.state.logged_in
+           ? <Menu />
+           : ``}
+        </div>
       </div>
     );
   }
+}
+
+function Menu() {
+  return (
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/accounts">Accounts</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/accounts">
+            <AccountsAPI />
+          </Route>
+          {/*<Route path="/">
+            <Home />
+          </Route>*/}
+        </Switch>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
