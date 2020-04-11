@@ -6,7 +6,9 @@ function AccountList(props) {
   
   return (
     <div>
-      <h1>Welcome to the accounts page</h1>
+      <div className="title">
+        <h1>Your accounts</h1>
+      </div>
       <div>
         {accountList && accountList.length > 0
         ? showAccounts(accountList)

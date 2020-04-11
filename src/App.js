@@ -103,44 +103,53 @@ class App extends Component {
 
     return (
       <div className="App">
+
+        {/*
         <Nav
           logged_in={this.state.logged_in}
           display_form={this.display_form}
           handle_logout={this.handle_logout}
         />
         {form}
-        <h3>
-          {this.state.logged_in
-            ? `Hello, ${this.state.username}`
-            : 'Please Log In'}
-        </h3>
+        */}
         <div>
           {this.state.logged_in
-           ? <Menu />
-           : ``}
+            ? <Menu handle_logout={this.handle_logout} username={this.state.username}/>
+            : <div>
+               <LoginForm handle_login={this.handle_login} />
+              </div>
+            }
         </div>
       </div>
     );
   }
 }
 
-function Menu() {
+function Menu(props) {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/accounts">Accounts</Link>
-            </li>
-          </ul>
-        </nav>
+      <div className="row">
+        <div className="column side">
+          Hello, {props.username}
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/accounts">Accounts</Link>
+              </li>
+              <li>
+                <a href="/login" onClick={props.handle_logout}>Logout</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
+        <div className="column middle">
         <Switch>
           <Route path="/accounts">
             <AccountsAPI />
@@ -149,6 +158,7 @@ function Menu() {
             <Home />
           </Route>*/}
         </Switch>
+        </div>
       </div>
     </Router>
   );
