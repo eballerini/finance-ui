@@ -10,6 +10,7 @@ import Nav from './components/Nav';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import AccountsAPI from './components/AccountsAPI';
+import TransactionsAPI from './components/TransactionsAPI';
 
 import './App.css';
 
@@ -140,6 +141,9 @@ function Menu(props) {
                 <Link to="/accounts">Accounts</Link>
               </li>
               <li>
+                <Link to="/transactions">Transactions</Link>
+              </li>
+              <li>
                 <a href="/login" onClick={props.handle_logout}>Logout</a>
               </li>
             </ul>
@@ -153,6 +157,10 @@ function Menu(props) {
         <Switch>
           <Route path="/accounts">
             <AccountsAPI />
+          </Route>
+          {/*TODO change this to /accounts/:account_id/transactions */}
+          <Route path="/transactions">
+            <TransactionsAPI />
           </Route>
           {/*<Route path="/">
             <Home />

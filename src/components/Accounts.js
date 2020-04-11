@@ -29,7 +29,6 @@ function showAccounts(accounts) {
   
   return (
     <div>
-      <p>Here are your accounts</p>
       <table>
         <thead>
           <tr>

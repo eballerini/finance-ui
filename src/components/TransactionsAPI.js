@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import './App.css';
-import TransactionList from './transactions.js';
+import '../App.css';
+import TransactionList from './Transactions.js';
 
-function TransactionsWithData() {
+function TransactionsAPI() {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   
   // TODO move this to a function
   useEffect(() => {
     fetch(
-      `http://localhost:8080/expense/accounts/1/transactions`,
+      `http://localhost:8080/expense/api/transactions`,
       {
         method: "GET",
         headers: new Headers({
-          Accept: "application/vnd.github.cloak-preview"
+          Authorization: `JWT ${localStorage.getItem('token')}`,
         })
       }
     )
@@ -21,19 +22,25 @@ function TransactionsWithData() {
       .then(response => {
         setTransactions(response);
         setIsLoading(false);
+        setIsError(false);
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        setIsError(true);
+        setIsLoading(false);
+      });
   }, []);
   
   // TODO change class name
   return (
-    <div className="App">
+    <div className="">
       <div>
         <TransactionList transactions={transactions}/>
         {isLoading && <p>Loading transactions</p>}
+        {isError && <p>Error loading transactions</p>}
       </div>
     </div>
   );
 }
 
-export default TransactionsWithData;
+export default TransactionsAPI;
