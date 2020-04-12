@@ -7,6 +7,9 @@ function TransactionList(props) {
   const paymentMethods = {
     'CA': 'Cash',
     'CC': 'Credit Card',
+    'ET': 'E-transfer',
+    'TR': 'Direct transfer',
+    'CK': 'Cheque',
   };
   
   return (
@@ -31,8 +34,8 @@ function showTransactions(transactions, paymentMethods) {
       <td>{ transaction.date_added }</td>
       <td>${ transaction.amount }</td>
       <td>{ paymentMethods[transaction.payment_method_type] }</td>
-      <td>{ transaction.credit_card }</td>
-      <td>{ transaction.category }</td>
+      <td>{ transaction.credit_card ? transaction.credit_card.name : '' }</td>
+      <td>{ transaction.category.name }</td>
     </tr>
   );
   
