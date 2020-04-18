@@ -35,7 +35,7 @@ function showTransactions(transactions, paymentMethods) {
       <td>${ transaction.amount }</td>
       <td>{ paymentMethods[transaction.payment_method_type] }</td>
       <td>{ transaction.credit_card ? transaction.credit_card.name : '' }</td>
-      <td>{ transaction.category.name }</td>
+      <td>{ transaction.category ? transaction.category.name : '' }</td>
     </tr>
   );
   
