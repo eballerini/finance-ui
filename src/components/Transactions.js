@@ -1,6 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function TransactionList(props) {
+  const defaultDescription = 'good food';
+  const defaultDateAdded = '2020-03-09';
+  const defaultAmount = '10';
+  
+  const [description, setDescription] = useState(defaultDescription);
+  const [dateAdded, setDateAdded] = useState(defaultDateAdded);
+  const [amount, setAmount] = useState(defaultAmount);
+  
+  function setMyDescription(event) {
+    setDescription(event.target.value);
+  }
+  
+  function setMyDateAdded(event) {
+    setDateAdded(event.target.value);
+  }
+  
+  function setMyAmount(event) {
+    setAmount(event.target.value);
+  }
+  
+  function mySubmitHandler(event) {
+    event.preventDefault();
+    console.log("description: " + description);
+    console.log("dateAdded: " + dateAdded);
+    console.log("amount: " + amount);
+    fetch(
+      `http://localhost:8080/expense/api/transactions/`,
+      {
+        method: "POST",
+        headers: {
+          'Authorization': `JWT ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          description: description,
+          date_added: dateAdded,
+          amount: amount,
+          account: 2, // TODO this shoud be set on the back-end
+        }),
+      }
+    )
+    .then(async response => {
+          console.log('may be a success');
+          const data = await response.json();
+
+          // check for error response
+          if (!response.ok) {
+              // get error message from body or default to response status
+              const error = (data && data.message) || response.status;
+              return Promise.reject(error);
+          }
+          console.log('success: transaction created');
+          // props.history.push('/transactions');
+      })
+      .catch(error => {
+          console.error('There was an error!', error);
+          alert('failed');
+          // this.setState({ errorMessage: error });
+      });
+  }
+  
+  
   
   const transactionList = props.transactions;
   
@@ -17,6 +79,21 @@ function TransactionList(props) {
       <div className="title">
         <h1>Your transactions</h1>
       </div>
+      <form id="transaction" onSubmit={mySubmitHandler}>
+        <table>
+          <tbody>
+            <tr>
+              <td><input type="submit"/></td>
+              <td><input type="text" name="description" onChange={setMyDescription} value={defaultDescription}/></td>
+              <td><input type="text" name="dateAdded" onChange={setMyDateAdded} value={defaultDateAdded}/></td>
+              <td><input type="text" name="amount" onChange={setMyAmount} value={defaultAmount}/></td>
+              <td>payment_method_type</td>
+              <td>credit_card.name</td>
+              <td>category.name</td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
       <div>
         {transactionList && transactionList.length > 0
         ? showTransactions(transactionList, paymentMethods)
@@ -41,22 +118,22 @@ function showTransactions(transactions, paymentMethods) {
   
   return (
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Payment method</th>
-            <th>Credit card</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {transactionList}
-        </tbody>
-      </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Payment method</th>
+              <th>Credit card</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactionList}
+          </tbody>
+        </table>
     </div>
   );
 }
