@@ -21,11 +21,8 @@ function TransactionList(props) {
     setAmount(event.target.value);
   }
   
-  function mySubmitHandler(event) {
+  function mySubmitHandler(event, props) {
     event.preventDefault();
-    console.log("description: " + description);
-    console.log("dateAdded: " + dateAdded);
-    console.log("amount: " + amount);
     fetch(
       `http://localhost:8080/expense/api/transactions/`,
       {
@@ -38,7 +35,6 @@ function TransactionList(props) {
           description: description,
           date_added: dateAdded,
           amount: amount,
-          account: 2, // TODO this shoud be set on the back-end
         }),
       }
     )
@@ -53,11 +49,11 @@ function TransactionList(props) {
               return Promise.reject(error);
           }
           console.log('success: transaction created');
-          // props.history.push('/transactions');
+          window.location.reload(false);
       })
       .catch(error => {
           console.error('There was an error!', error);
-          alert('failed');
+          alert('failed:' + error);
           // this.setState({ errorMessage: error });
       });
   }
@@ -79,7 +75,7 @@ function TransactionList(props) {
       <div className="title">
         <h1>Your transactions</h1>
       </div>
-      <form id="transaction" onSubmit={mySubmitHandler}>
+      <form id="transaction" onSubmit={(event) => mySubmitHandler(event)}>
         <table>
           <tbody>
             <tr>
