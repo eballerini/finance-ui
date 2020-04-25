@@ -1,14 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function TransactionList(props) {
   const defaultDescription = 'good food';
   const defaultDateAdded = '2020-03-09';
   const defaultAmount = '10';
   
+  const [creditCards, setCreditCards] = useState([]);
+  
   const [description, setDescription] = useState(defaultDescription);
   const [dateAdded, setDateAdded] = useState(defaultDateAdded);
   const [amount, setAmount] = useState(defaultAmount);
   const [paymentMethodType, setPaymentMethodType] = useState('CC');
+  const [creditCard, setCreditCard] = useState();
+  
+  function handleErrors(response) {
+    console.log("response.status: " + response.status);
+    if (!response.ok) {
+        throw Error(response.statusText);
+    }
+    return response.json();
+  }
+  
+  useEffect(() => {
+    fetch(
+      `http://localhost:8080/expense/api/creditcards/`,
+      {
+        method: "GET",
+        headers: new Headers({
+          Authorization: `JWT ${localStorage.getItem('token')}`,
+        })
+      }
+    )
+      // .then(res => {
+        // if (res.status == 200) {
+        //   console.log('loaded credit cards');
+        //   return res.json();
+        // } else {
+        //   console.log('error loading credit cards');
+        //   return res;
+        // }
+        // return res.json();
+      // })
+      .then(handleErrors)
+      .then(response => {
+        console.log('loaded credit cards');
+        setCreditCards(response);
+        // setIsLoading(false);
+      })
+      .catch(error => console.log(error));
+  }, []);
   
   function setMyDescription(event) {
     setDescription(event.target.value);
@@ -26,6 +66,10 @@ function TransactionList(props) {
     setPaymentMethodType(event.target.value);
   }
   
+  function setMyCreditCard(event) {
+    setCreditCard(event.target.value);
+  }
+  
   function mySubmitHandler(event, props) {
     event.preventDefault();
     fetch(
@@ -41,6 +85,7 @@ function TransactionList(props) {
           date_added: dateAdded,
           amount: amount,
           payment_method_type: paymentMethodType,
+          credit_card: creditCard,
         }),
       }
     )
@@ -98,7 +143,16 @@ function TransactionList(props) {
                   }
                 </select>
               </td>
-              <td>credit_card.name</td>
+              <td>
+                <select name="creditCard" onChange={setMyCreditCard}>
+                  <option key="-1" value="-1">-</option>
+                  {
+                    creditCards.map((creditCard, index) => (
+                      <option key={index} value={creditCard.id}>{creditCard.name}</option>
+                    ))
+                  }
+                </select>
+              </td>
               <td>category.name</td>
             </tr>
           </tbody>
