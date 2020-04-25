@@ -8,6 +8,7 @@ function TransactionList(props) {
   const [description, setDescription] = useState(defaultDescription);
   const [dateAdded, setDateAdded] = useState(defaultDateAdded);
   const [amount, setAmount] = useState(defaultAmount);
+  const [paymentMethodType, setPaymentMethodType] = useState('CC');
   
   function setMyDescription(event) {
     setDescription(event.target.value);
@@ -19,6 +20,10 @@ function TransactionList(props) {
   
   function setMyAmount(event) {
     setAmount(event.target.value);
+  }
+  
+  function setMyPaymentMethodType(event) {
+    setPaymentMethodType(event.target.value);
   }
   
   function mySubmitHandler(event, props) {
@@ -35,6 +40,7 @@ function TransactionList(props) {
           description: description,
           date_added: dateAdded,
           amount: amount,
+          payment_method_type: paymentMethodType,
         }),
       }
     )
@@ -63,8 +69,8 @@ function TransactionList(props) {
   const transactionList = props.transactions;
   
   const paymentMethods = {
-    'CA': 'Cash',
     'CC': 'Credit Card',
+    'CA': 'Cash',
     'ET': 'E-transfer',
     'TR': 'Direct transfer',
     'CK': 'Cheque',
@@ -83,7 +89,15 @@ function TransactionList(props) {
               <td><input type="text" name="description" onChange={setMyDescription} value={defaultDescription}/></td>
               <td><input type="text" name="dateAdded" onChange={setMyDateAdded} value={defaultDateAdded}/></td>
               <td><input type="text" name="amount" onChange={setMyAmount} value={defaultAmount}/></td>
-              <td>payment_method_type</td>
+              <td>
+                <select name="paymentMethodType" onChange={setMyPaymentMethodType}>
+                  {
+                    Object.keys(paymentMethods).map((method, index) => (
+                      <option key={index} value={method}>{paymentMethods[method]}</option>
+                    ))
+                  }
+                </select>
+              </td>
               <td>credit_card.name</td>
               <td>category.name</td>
             </tr>
