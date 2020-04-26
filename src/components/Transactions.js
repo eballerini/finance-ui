@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { formatDate } from '../utils';
 
 function TransactionList(props) {
   const defaultDescription = 'good food';
@@ -202,7 +203,7 @@ function showTransactions(transactions, paymentMethods) {
     <tr key={index}>
       <td>{ transaction.id }</td>
       <td>{ transaction.description }</td>
-      <td>{ transaction.date_added }</td>
+      <td>{formatDate(transaction.date_added)}</td>
       <td>${ transaction.amount }</td>
       <td>{ paymentMethods[transaction.payment_method_type] }</td>
       <td>{ transaction.credit_card ? transaction.credit_card.name : '' }</td>
