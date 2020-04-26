@@ -153,7 +153,7 @@ function TransactionList(props) {
             <tr>
               <td><input type="submit"/></td>
               <td><input type="text" name="description" onChange={setMyDescription} defaultValue={defaultDescription}/></td>
-              <td><input type="text" name="dateAdded" onChange={setMyDateAdded} defaultValue={defaultDateAdded}/></td>
+              <td><input type="date" name="dateAdded" onChange={setMyDateAdded} defaultValue={defaultDateAdded}/></td>
               <td><input type="text" name="amount" onChange={setMyAmount} defaultValue={defaultAmount}/></td>
               <td>
                 <select name="paymentMethodType" onChange={setMyPaymentMethodType}>
