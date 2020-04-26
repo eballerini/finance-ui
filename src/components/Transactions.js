@@ -13,7 +13,7 @@ function TransactionList(props) {
   const [amount, setAmount] = useState(defaultAmount);
   const [paymentMethodType, setPaymentMethodType] = useState('CC');
   const [creditCard, setCreditCard] = useState();
-  const [category, setCategory] = useState([]);
+  const [category, setCategory] = useState();
   
   function handleErrors(response) {
     console.log("response.status: " + response.status);
@@ -114,7 +114,6 @@ function TransactionList(props) {
       }
     )
     .then(async response => {
-          console.log('may be a success');
           const data = await response.json();
 
           // check for error response
@@ -132,9 +131,7 @@ function TransactionList(props) {
           // this.setState({ errorMessage: error });
       });
   }
-  
-  
-  
+
   const transactionList = props.transactions;
   
   const paymentMethods = {
@@ -157,7 +154,7 @@ function TransactionList(props) {
               <td><input type="submit"/></td>
               <td><input type="text" name="description" onChange={setMyDescription} value={defaultDescription}/></td>
               <td><input type="text" name="dateAdded" onChange={setMyDateAdded} value={defaultDateAdded}/></td>
-              <td><input type="text" name="amount" onChange={setMyAmount} value={defaultAmount}/></td>
+              <td><input type="text" name="amount" onChange={setMyAmount}/></td>
               <td>
                 <select name="paymentMethodType" onChange={setMyPaymentMethodType}>
                   {
