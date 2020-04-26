@@ -6,12 +6,14 @@ function TransactionList(props) {
   const defaultAmount = '10';
   
   const [creditCards, setCreditCards] = useState([]);
+  const [categories, setCategories] = useState([]);
   
   const [description, setDescription] = useState(defaultDescription);
   const [dateAdded, setDateAdded] = useState(defaultDateAdded);
   const [amount, setAmount] = useState(defaultAmount);
   const [paymentMethodType, setPaymentMethodType] = useState('CC');
   const [creditCard, setCreditCard] = useState();
+  const [category, setCategory] = useState([]);
   
   function handleErrors(response) {
     console.log("response.status: " + response.status);
@@ -45,7 +47,24 @@ function TransactionList(props) {
       .then(response => {
         console.log('loaded credit cards');
         setCreditCards(response);
-        // setIsLoading(false);
+      })
+      .catch(error => console.log(error));
+  }, []);
+  
+  useEffect(() => {
+    fetch(
+      `http://localhost:8080/expense/api/categories/`,
+      {
+        method: "GET",
+        headers: new Headers({
+          Authorization: `JWT ${localStorage.getItem('token')}`,
+        })
+      }
+    )
+      .then(handleErrors)
+      .then(response => {
+        console.log('loaded categories');
+        setCategories(response);
       })
       .catch(error => console.log(error));
   }, []);
@@ -70,6 +89,10 @@ function TransactionList(props) {
     setCreditCard(event.target.value);
   }
   
+  function setMyCategory(event) {
+    setCategory(event.target.value);
+  }
+  
   function mySubmitHandler(event, props) {
     event.preventDefault();
     fetch(
@@ -86,6 +109,7 @@ function TransactionList(props) {
           amount: amount,
           payment_method_type: paymentMethodType,
           credit_card: creditCard,
+          category: category,
         }),
       }
     )
@@ -153,7 +177,16 @@ function TransactionList(props) {
                   }
                 </select>
               </td>
-              <td>category.name</td>
+              <td>
+                <select name="category" onChange={setMyCategory}>
+                  <option key="-1" value="-1">-</option>
+                  {
+                    categories.map((category, index) => (
+                      <option key={index} value={category.id}>{category.name}</option>
+                    ))
+                  }
+                </select>
+              </td>
             </tr>
           </tbody>
         </table>
