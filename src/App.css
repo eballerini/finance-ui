@@ -54,3 +54,21 @@ th {
   display: table;
   clear: both;
 }
+
+#transaction tr:hover {
+   background-color: #ffffff;
+}
+
+#transaction table {
+  border-collapse: collapse;
+  border-style: hidden;
+}
+
+#transaction td {
+  border-collapse: collapse;
+  border-style: hidden;
+}
+
+#transaction {
+  margin-bottom: 30px;
+}

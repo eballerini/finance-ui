@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { formatDate } from '../utils';
+import { formatDate, getTodayDate } from '../utils';
 
-function TransactionList(props) {
+function TransactionList(props) {  
   const defaultDescription = 'good food';
-  const defaultDateAdded = '2020-03-09';
+  const defaultDateAdded = getTodayDate();
   const defaultAmount = '10';
   
   const [creditCards, setCreditCards] = useState([]);
@@ -148,6 +148,7 @@ function TransactionList(props) {
       <div className="title">
         <h1>Your transactions</h1>
       </div>
+      <span>Quick add</span>
       <form id="transaction" onSubmit={(event) => mySubmitHandler(event)}>
         <table>
           <tbody>
