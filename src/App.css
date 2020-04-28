@@ -72,3 +72,14 @@ th {
 #transaction {
   margin-bottom: 30px;
 }
+
+input[type=text] {
+  padding: 5px 5px;
+  box-sizing: border-box;
+}
+
+input[type=password] {
+  padding: 5px 5px;
+  margin-left: 5px;
+  box-sizing: border-box;
+}
