@@ -5,6 +5,7 @@ import {
   Route,
   Link,
 } from "react-router-dom";
+import { withRouter } from 'react-router';
 
 import AccountsAPI from './components/AccountsAPI';
 import Hello from './components/Hello';
@@ -16,7 +17,10 @@ import TransactionsAPI from './components/TransactionsAPI';
 
 import './App.css';
 
+import axiosInstance from './axiosApi';
+
 class App extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +28,25 @@ class App extends Component {
       logged_in: localStorage.getItem('token') ? true : false,
       username: ''
     };
+    this.handleLogout = this.handleLogout.bind(this);
   }
+  
+  async handleLogout() {
+    try {
+        const response = await axiosInstance.post('/blacklist/', {
+            "refresh_token": localStorage.getItem("refresh_token")
+        });
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        axiosInstance.defaults.headers['Authorization'] = null;
+        console.log('successfully logged out');
+        this.props.history.push('/login');
+        return response;
+    }
+    catch (e) {
+        console.log(e);
+    }
+  };
 
   componentDidMount() {
     if (this.state.logged_in) {
@@ -129,25 +151,26 @@ class App extends Component {
   
   render(){
     return (
-            <div className="site">
-                <nav>
-                    <Link className={"nav-link"} to={"/"}>Home</Link>
-                    <Link className={"nav-link"} to={"/login/"}>Login</Link>
-                    <Link className={"nav-link"} to={"/hello/"}>Hello</Link>
-                    <Link className={"nav-link"} to={"/accounts"}>Accounts</Link>
-                    logout signup
-                </nav>
-                <main>
-                    <h1>Welcome to Expenses!</h1>
-                    <Switch>
-                        <Route exact path={"/login/"} component={Login}/>
-                        <Route exact path={"/hello/"} component={Hello}/>
-                        <Route exact path={"/accounts/"} component={AccountsAPI}/>
-                        <Route path={"/"} render={() => <div>Home again</div>}/>
-                   </Switch>
-               </main>
-            </div>
-        );
+        <div className="site">
+            <nav>
+                <Link className={"nav-link"} to={"/"}>Home</Link>
+                <Link className={"nav-link"} to={"/login/"}>Login</Link>
+                <Link className={"nav-link"} to={"/hello/"}>Hello</Link>
+                <Link className={"nav-link"} to={"/accounts"}>Accounts</Link>
+                Signup
+                <button onClick={this.handleLogout}>Logout</button>
+            </nav>
+            <main>
+                <h1>Welcome to Expenses!</h1>
+                <Switch>
+                    <Route exact path={"/login/"} component={Login}/>
+                    <Route exact path={"/hello/"} component={Hello}/>
+                    <Route exact path={"/accounts/"} component={AccountsAPI}/>
+                    <Route path={"/"} render={() => <div>Home again</div>}/>
+               </Switch>
+           </main>
+        </div>
+    );
   }
 }
 
@@ -197,4 +220,4 @@ function Menu(props) {
   );
 }
 
-export default App;
+export default withRouter(App);
