@@ -6,10 +6,12 @@ import {
   Link,
 } from "react-router-dom";
 
-import Nav from './components/Nav';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
 import AccountsAPI from './components/AccountsAPI';
+import Hello from './components/Hello';
+import Login from './components/Login';
+import LoginForm from './components/LoginForm';
+import Nav from './components/Nav';
+import SignupForm from './components/SignupForm';
 import TransactionsAPI from './components/TransactionsAPI';
 
 import './App.css';
@@ -89,7 +91,7 @@ class App extends Component {
     });
   };
 
-  render() {
+  renderOld() {
     let form;
     switch (this.state.displayed_form) {
       case 'login':
@@ -123,6 +125,29 @@ class App extends Component {
         </div>
       </div>
     );
+  }
+  
+  render(){
+    return (
+            <div className="site">
+                <nav>
+                    <Link className={"nav-link"} to={"/"}>Home</Link>
+                    <Link className={"nav-link"} to={"/login/"}>Login</Link>
+                    <Link className={"nav-link"} to={"/hello/"}>Hello</Link>
+                    <Link className={"nav-link"} to={"/accounts"}>Accounts</Link>
+                    logout signup
+                </nav>
+                <main>
+                    <h1>Welcome to Expenses!</h1>
+                    <Switch>
+                        <Route exact path={"/login/"} component={Login}/>
+                        <Route exact path={"/hello/"} component={Hello}/>
+                        <Route exact path={"/accounts/"} component={AccountsAPI}/>
+                        <Route path={"/"} render={() => <div>Home again</div>}/>
+                   </Switch>
+               </main>
+            </div>
+        );
   }
 }
 
