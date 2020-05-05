@@ -7,14 +7,14 @@ class Login extends Component {
         this.state = {username: "", password: ""};
 
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmitWThen = this.handleSubmitWThen.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
         this.setState({[event.target.name]: event.target.value});
     }
     
-    handleSubmitWThen(event) {
+    handleSubmit(event) {
         event.preventDefault();
         axiosInstance.post('/token/obtain/', {
             username: this.state.username,
@@ -28,6 +28,7 @@ class Login extends Component {
               axiosInstance.defaults.headers['Authorization'] = "JWT " + access_token;
               localStorage.setItem('access_token', access_token);
               localStorage.setItem('refresh_token', result.data.refresh);
+              this.props.history.push('/accounts');
             }
         ).catch (error => {
             throw error;
@@ -37,7 +38,7 @@ class Login extends Component {
     render() {
         return (
             <div>Login
-                <form onSubmit={this.handleSubmitWThen}>
+                <form onSubmit={this.handleSubmit}>
                     <label>
                         Username:
                         <input name="username" type="text" value={this.state.username} onChange={this.handleChange}/>
