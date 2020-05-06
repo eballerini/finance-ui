@@ -40,6 +40,7 @@ class App extends Component {
         localStorage.removeItem('refresh_token');
         axiosInstance.defaults.headers['Authorization'] = null;
         console.log('successfully logged out');
+        this.setState({ logged_in: false, username: '' });
         this.props.history.push('/login');
         return response;
     }
@@ -61,25 +62,31 @@ class App extends Component {
         });
     }
   }
-
-  handle_login = (e, data) => {
-    e.preventDefault();
-    fetch('http://localhost:8080/token-auth/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(json => {
-        localStorage.setItem('token', json.token);
-        this.setState({
-          logged_in: true,
-          displayed_form: '',
-          username: json.user.username
-        });
-      });
+  
+  handleSubmit = (event, username, password)  => {
+      event.preventDefault();
+      axiosInstance.post('/token/obtain/', {
+          username: username,
+          password: password
+      }).then(
+          result => {
+            const access_token = result.data.access;
+            const parsed_token = JSON.parse(atob(access_token.split('.')[1]));
+            const username = parsed_token.username;
+            console.log(username);
+            axiosInstance.defaults.headers['Authorization'] = "JWT " + access_token;
+            localStorage.setItem('access_token', access_token);
+            localStorage.setItem('refresh_token', result.data.refresh);
+            // TODO set state, similar to handle_login_old
+            this.setState({
+              logged_in: true,
+              username: username
+            });
+            this.props.history.push('/accounts');
+          }
+      ).catch (error => {
+          throw error;
+      })
   };
 
   handle_signup = (e, data) => {
@@ -112,58 +119,29 @@ class App extends Component {
       displayed_form: form
     });
   };
-
-  renderOld() {
-    let form;
-    switch (this.state.displayed_form) {
-      case 'login':
-        form = <LoginForm handle_login={this.handle_login} />;
-        break;
-      case 'signup':
-        form = <SignupForm handle_signup={this.handle_signup} />;
-        break;
-      default:
-        form = null;
-    }
-
-    return (
-      <div className="App">
-
-        {/*
-        <Nav
-          logged_in={this.state.logged_in}
-          display_form={this.display_form}
-          handle_logout={this.handle_logout}
-        />
-        {form}
-        */}
-        <div>
-          {this.state.logged_in
-            ? <Menu handle_logout={this.handle_logout} username={this.state.username}/>
-            : <div>
-               <LoginForm handle_login={this.handle_login} />
-              </div>
-            }
-        </div>
-      </div>
-    );
-  }
   
   render(){
     return (
         <div className="site">
             <nav>
-                <Link className={"nav-link"} to={"/"}>Home</Link>
-                <Link className={"nav-link"} to={"/login/"}>Login</Link>
-                <Link className={"nav-link"} to={"/hello/"}>Hello</Link>
-                <Link className={"nav-link"} to={"/accounts"}>Accounts</Link>
-                Signup
-                <button onClick={this.handleLogout}>Logout</button>
+                {this.state.logged_in
+                  ?
+                  <>
+                    <span>Hello, {this.state.username}</span>
+                    <Link className={"nav-link"} to={"/hello/"}>Hello</Link>
+                    <Link className={"nav-link"} to={"/accounts"}>Accounts</Link>
+                    <button onClick={this.handleLogout}>Logout</button>
+                  </>
+                  :
+                  <Link className={"nav-link"} to={"/login/"}>Login</Link>
+                }
+                
             </nav>
             <main>
-                <h1>Welcome to Expenses!</h1>
                 <Switch>
-                    <Route exact path={"/login/"} component={Login}/>
+                    <Route exact path={"/login/"} 
+                    render={(props) => <Login {...props} handle_submit={this.handleSubmit} />}
+                    />
                     <Route exact path={"/hello/"} component={Hello}/>
                     <Route exact path={"/accounts/"} component={AccountsAPI}/>
                     <Route path={"/"} render={() => <div>Home again</div>}/>

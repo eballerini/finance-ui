@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 import axiosInstance from "../axiosApi";
 
 class Login extends Component {
@@ -37,8 +38,10 @@ class Login extends Component {
 
     render() {
         return (
-            <div>Login
-                <form onSubmit={this.handleSubmit}>
+            <div>
+                <h1>Welcome to Expenses!</h1>
+                Login
+                <form onSubmit={e => this.props.handle_submit(e, this.state.username, this.state.password)}>
                     <label>
                         Username:
                         <input name="username" type="text" value={this.state.username} onChange={this.handleChange}/>
@@ -49,8 +52,16 @@ class Login extends Component {
                     </label>
                     <input type="submit" value="Submit"/>
                 </form>
+                <br/>
+                <br/>
+                <br/>
+                <div>Link to signup</div>
             </div>
         )
     }
 }
 export default Login;
+
+Login.propTypes = {
+  handle_submit: PropTypes.func.isRequired
+};
