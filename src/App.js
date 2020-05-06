@@ -77,7 +77,6 @@ class App extends Component {
             axiosInstance.defaults.headers['Authorization'] = "JWT " + access_token;
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('refresh_token', result.data.refresh);
-            // TODO set state, similar to handle_login_old
             this.setState({
               logged_in: true,
               username: username
@@ -108,28 +107,19 @@ class App extends Component {
         });
       });
   };
-
-  handle_logout = () => {
-    localStorage.removeItem('token');
-    this.setState({ logged_in: false, username: '' });
-  };
-
-  display_form = form => {
-    this.setState({
-      displayed_form: form
-    });
-  };
   
   render(){
     return (
-        <div className="site">
-            <nav>
+        <div className="site row">
+            <nav className="column side">
                 {this.state.logged_in
                   ?
                   <>
-                    <span>Hello, {this.state.username}</span>
-                    <Link className={"nav-link"} to={"/hello/"}>Hello</Link>
-                    <Link className={"nav-link"} to={"/accounts"}>Accounts</Link>
+                    <p>Hello, {this.state.username}</p>
+                    <ul>
+                      <li><Link className={"nav-link"} to={"/hello/"}>Hello</Link></li>
+                      <li><Link className={"nav-link"} to={"/accounts/"}>Accounts</Link></li>
+                    </ul>
                     <button onClick={this.handleLogout}>Logout</button>
                   </>
                   :
@@ -137,7 +127,7 @@ class App extends Component {
                 }
                 
             </nav>
-            <main>
+            <main className="column middle">
                 <Switch>
                     <Route exact path={"/login/"} 
                     render={(props) => <Login {...props} handle_submit={this.handleSubmit} />}
@@ -168,9 +158,6 @@ function Menu(props) {
               </li>
               <li>
                 <Link to="/transactions">Transactions</Link>
-              </li>
-              <li>
-                <a href="/login" onClick={props.handle_logout}>Logout</a>
               </li>
             </ul>
           </nav>
