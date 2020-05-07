@@ -2,25 +2,18 @@ import React, { useState, useEffect } from "react";
 import '../App.css';
 import TransactionList from './Transactions.js';
 
+import axiosInstance from '../axiosApi';
+
 function TransactionsAPI() {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   
-  // TODO move this to a function
   useEffect(() => {
-    fetch(
-      `http://localhost:8080/expense/api/transactions`,
-      {
-        method: "GET",
-        headers: new Headers({
-          Authorization: `JWT ${localStorage.getItem('token')}`,
-        })
-      }
-    )
-      .then(res => res.json())
+    axiosInstance.get(`api/transactions/`)
       .then(response => {
-        setTransactions(response);
+        console.log('transactions loaded');
+        setTransactions(response.data);
         setIsLoading(false);
         setIsError(false);
       })
@@ -30,7 +23,7 @@ function TransactionsAPI() {
         setIsLoading(false);
       });
   }, []);
-  
+    
   // TODO change class name
   return (
     <div className="">

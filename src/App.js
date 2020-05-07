@@ -120,6 +120,7 @@ class App extends Component {
                     <ul>
                       <li><Link className={"nav-link"} to={"/hello/"}>Hello</Link></li>
                       <li><Link className={"nav-link"} to={"/accounts/"}>Accounts</Link></li>
+                      <li><Link className={"nav-link"} to={"/transactions/"}>Transactions</Link></li>
                       <li><Link className={"nav-link"} to={"/login/"}>Login</Link></li>
                     </ul>
                     <button onClick={this.handleLogout}>Logout</button>
@@ -132,6 +133,7 @@ class App extends Component {
                     />
                     <Route exact path={"/hello/"} component={Hello}/>
                     <Route exact path={"/accounts/"} component={AccountsAPI}/>
+                    <Route exact path={"/transactions/"} component={TransactionsAPI}/>
                     <Route path={"/"} render={() => <div>Home again</div>}/>
                </Switch>
            </main>

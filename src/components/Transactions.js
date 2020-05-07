@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { formatDate, getTodayDate } from '../utils';
 
+import axiosInstance from '../axiosApi';
+
 function TransactionList(props) {  
   const defaultDescription = 'good food';
   const defaultDateAdded = getTodayDate();
@@ -25,47 +27,21 @@ function TransactionList(props) {
   }
   
   useEffect(() => {
-    fetch(
-      `http://localhost:8080/expense/api/creditcards/`,
-      {
-        method: "GET",
-        headers: new Headers({
-          Authorization: `JWT ${localStorage.getItem('token')}`,
-        })
-      }
-    )
-      // .then(res => {
-        // if (res.status == 200) {
-        //   console.log('loaded credit cards');
-        //   return res.json();
-        // } else {
-        //   console.log('error loading credit cards');
-        //   return res;
-        // }
-        // return res.json();
-      // })
-      .then(handleErrors)
+    axiosInstance.get(`api/creditcards/`)
+      // .then(handleErrors)
       .then(response => {
         console.log('loaded credit cards');
-        setCreditCards(response);
+        setCreditCards(response.data);
       })
       .catch(error => console.log(error));
   }, []);
   
   useEffect(() => {
-    fetch(
-      `http://localhost:8080/expense/api/categories/`,
-      {
-        method: "GET",
-        headers: new Headers({
-          Authorization: `JWT ${localStorage.getItem('token')}`,
-        })
-      }
-    )
-      .then(handleErrors)
+    axiosInstance.get(`api/categories/`)
+      // .then(handleErrors)
       .then(response => {
         console.log('loaded categories');
-        setCategories(response);
+        setCategories(response.data);
       })
       .catch(error => console.log(error));
   }, []);
@@ -96,36 +72,33 @@ function TransactionList(props) {
   
   function mySubmitHandler(event, props) {
     event.preventDefault();
-    fetch(
-      `http://localhost:8080/expense/api/transactions/`,
-      {
-        method: "POST",
-        headers: {
-          'Authorization': `JWT ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          description: description,
-          date_added: dateAdded,
-          amount: amount,
-          payment_method_type: paymentMethodType,
-          credit_card: creditCard,
-          category: category,
-        }),
-      }
-    )
-    .then(async response => {
-          const data = await response.json();
-
-          // check for error response
-          if (!response.ok) {
-              // get error message from body or default to response status
-              const error = (data && data.message) || response.status;
-              return Promise.reject(error);
-          }
+    axiosInstance.post('api/transactions/', {
+      description: description,
+      date_added: dateAdded,
+      amount: amount,
+      payment_method_type: paymentMethodType,
+      credit_card: creditCard,
+      category: category,
+    })
+    // .then(async response => {
+    //       const data = await response.json();
+    // 
+    //       // check for error response
+    //       if (!response.ok) {
+    //           // get error message from body or default to response status
+    //           const error = (data && data.message) || response.status;
+    //           return Promise.reject(error);
+    //       }
+    //       console.log('success: transaction created');
+    //       window.location.reload(false);
+    //   })
+    .then(
+        result => {
           console.log('success: transaction created');
+          // TODO ideally we'd only reload the transactions rather than the whole page
           window.location.reload(false);
-      })
+        }
+    )
       .catch(error => {
           console.error('There was an error!', error);
           alert('failed:' + error);
