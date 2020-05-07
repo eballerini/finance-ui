@@ -112,19 +112,18 @@ class App extends Component {
         <div className="site row">
             <nav className="column side">
                 {this.state.logged_in
-                  ?
+                  ? 'logged in'
+                  : 'not logged in'
+                }
                   <>
                     <p>Hello, {this.state.username}</p>
                     <ul>
                       <li><Link className={"nav-link"} to={"/hello/"}>Hello</Link></li>
                       <li><Link className={"nav-link"} to={"/accounts/"}>Accounts</Link></li>
+                      <li><Link className={"nav-link"} to={"/login/"}>Login</Link></li>
                     </ul>
                     <button onClick={this.handleLogout}>Logout</button>
                   </>
-                  :
-                  <Link className={"nav-link"} to={"/login/"}>Login</Link>
-                }
-                
             </nav>
             <main className="column middle">
                 <Switch>
