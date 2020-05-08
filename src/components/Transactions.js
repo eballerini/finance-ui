@@ -127,7 +127,7 @@ function TransactionList(props) {
           <tbody>
             <tr>
               <td><input type="submit"/></td>
-              <td><input type="text" name="description" onChange={setMyDescription} defaultValue={defaultDescription}/></td>
+              <td><input type="text" name="description" onChange={setMyDescription} defaultValue={defaultDescription} maxLength="200"/></td>
               <td><input type="date" name="dateAdded" onChange={setMyDateAdded} defaultValue={defaultDateAdded}/></td>
               <td><input type="text" name="amount" onChange={setMyAmount} defaultValue={defaultAmount}/></td>
               <td>
@@ -186,7 +186,7 @@ function showTransactions(transactions, paymentMethods) {
   );
   
   return (
-    <div>
+    <div className="transaction-list">
         <table>
           <thead>
             <tr>
