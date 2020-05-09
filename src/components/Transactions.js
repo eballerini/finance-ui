@@ -153,6 +153,25 @@ function TransactionList(props) {
           // this.setState({ errorMessage: error });
       });
   }
+  
+  function submitDeleteHandler(event, transaction_id) {
+    event.preventDefault();
+    const payload = {};
+    console.log(payload);
+    axiosInstance.delete('api/transactions/' + transaction_id + '/', payload)
+    .then(
+        result => {
+          console.log('success: transaction updated');
+          // TODO ideally we'd only reload the transactions rather than the whole page
+          window.location.reload();
+        }
+    )
+      .catch(error => {
+          console.error('There was an error!', error);
+          alert('failed:' + error);
+          // this.setState({ errorMessage: error });
+      });
+  }
 
   const transactionList = props.transactions;
   
@@ -221,14 +240,14 @@ function TransactionList(props) {
       
       <div>
         {transactionList && transactionList.length > 0
-        ? showTransactions(transactionList, paymentMethods, isEditable, setEditableRowNumber, editableRowNumber, setValue, creditCards, categories, submitEditHandler, setNewValue)
+        ? showTransactions(transactionList, paymentMethods, isEditable, setEditableRowNumber, editableRowNumber, setValue, creditCards, categories, submitEditHandler, setNewValue, submitDeleteHandler)
         : `You don't have any transactions`}
       </div>
     </div>
   );
 }
 
-function showTransactions(transactions, paymentMethods, isEditable, setRowNumber, editableRowNumber, setValue, creditCards, categories, submitEditHandler, setNewValue) {
+function showTransactions(transactions, paymentMethods, isEditable, setRowNumber, editableRowNumber, setValue, creditCards, categories, submitEditHandler, setNewValue, submitDeleteHandler) {
   const transactionList = transactions.map((transaction, index) => 
   <Fragment key={index}>
   {editableRowNumber === index
@@ -280,7 +299,7 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
       <td>{ transaction.category ? transaction.category.name : '' }</td>
       <td className={isEditable ? '' : 'hidden'}>
         <button type="button" onClick={() => {
-          setRowNumber(index); 
+          setRowNumber(index);
           setNewValue('description', '');
           setNewValue('dateAdded', '');
           setNewValue('amount', '');
@@ -288,6 +307,17 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
           setNewValue('creditCard', '');
           setNewValue('category', '');
         }}>Edit</button>
+      </td>
+      <td className={isEditable ? '' : 'hidden'}>
+        <button type="button" onClick={(event) => {
+          if (window.confirm('Are you sure you want to delete this transaction?')) {
+            // Save it!
+            submitDeleteHandler(event, transaction.id);
+          } else {
+            // Do nothing!
+            console.log('Delete cancelled');
+          }
+        }}>Delete</button>
       </td>
     </tr>
   }
@@ -307,6 +337,7 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
                 <th>Payment method</th>
                 <th>Credit card</th>
                 <th>Category</th>
+                <th className={isEditable ? '' : 'hidden'}></th>
                 <th className={isEditable ? '' : 'hidden'}></th>
               </tr>
             </thead>
