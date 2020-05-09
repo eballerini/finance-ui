@@ -57,17 +57,17 @@ function TransactionList(props) {
   function setNewValue(field, newValue) {
     // console.log(field);
     // console.log(newValue);
-    if (field == 'description') {
+    if (field === 'description') {
       setDescription(newValue);
-    } else if (field == 'dateAdded') {
+    } else if (field === 'dateAdded') {
       setDateAdded(newValue);
-    } else if (field == 'amount') {
+    } else if (field === 'amount') {
       setAmount(newValue);
-    } else if (field == 'paymentMethodType') {
+    } else if (field === 'paymentMethodType') {
       setPaymentMethodType(newValue);
-    } else if (field == 'creditCard') {
+    } else if (field === 'creditCard') {
       setCreditCard(newValue);
-    } else if (field == 'category') {
+    } else if (field === 'category') {
       setCategory(newValue);
     } 
   }
@@ -231,7 +231,7 @@ function TransactionList(props) {
 function showTransactions(transactions, paymentMethods, isEditable, setRowNumber, editableRowNumber, setValue, creditCards, categories, submitEditHandler, setNewValue) {
   const transactionList = transactions.map((transaction, index) => 
   <>
-  {editableRowNumber == index
+  {editableRowNumber === index
     ?
     <tr key={index}>
       <td>{ transaction.id }</td>
