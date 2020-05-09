@@ -278,17 +278,17 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
       <td>{ paymentMethods[transaction.payment_method_type] }</td>
       <td>{ transaction.credit_card ? transaction.credit_card.name : '' }</td>
       <td>{ transaction.category ? transaction.category.name : '' }</td>
-      {isEditable
-      ? <td><button type="button" onClick={() => {
-        setRowNumber(index); 
-        setNewValue('description', '');
-        setNewValue('dateAdded', '');
-        setNewValue('amount', '');
-        setNewValue('paymentMethodType', '');
-        setNewValue('creditCard', '');
-        setNewValue('category', '');
-      }}>Edit</button></td>
-      : ''}
+      <td className={isEditable ? '' : 'hidden'}>
+        <button type="button" onClick={() => {
+          setRowNumber(index); 
+          setNewValue('description', '');
+          setNewValue('dateAdded', '');
+          setNewValue('amount', '');
+          setNewValue('paymentMethodType', '');
+          setNewValue('creditCard', '');
+          setNewValue('category', '');
+        }}>Edit</button>
+      </td>
     </tr>
   }
   </Fragment>
@@ -307,9 +307,7 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
                 <th>Payment method</th>
                 <th>Credit card</th>
                 <th>Category</th>
-                {isEditable
-                ? <th></th>
-                : ''}
+                <th className={isEditable ? '' : 'hidden'}></th>
               </tr>
             </thead>
             <tbody>
