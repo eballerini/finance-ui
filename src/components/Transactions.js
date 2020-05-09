@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { formatDate, getTodayDate } from '../utils';
 
 import axiosInstance from '../axiosApi';
@@ -230,7 +230,7 @@ function TransactionList(props) {
 
 function showTransactions(transactions, paymentMethods, isEditable, setRowNumber, editableRowNumber, setValue, creditCards, categories, submitEditHandler, setNewValue) {
   const transactionList = transactions.map((transaction, index) => 
-  <>
+  <Fragment key={index}>
   {editableRowNumber === index
     ?
     <tr key={index}>
@@ -291,7 +291,7 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
       : ''}
     </tr>
   }
-  </>
+  </Fragment>
   );
   
   return (
