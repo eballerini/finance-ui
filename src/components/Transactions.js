@@ -4,16 +4,14 @@ import { formatDate, getTodayDate } from '../utils';
 import axiosInstance from '../axiosApi';
 
 function TransactionList(props) {  
-  const defaultDescription = 'good food';
   const defaultDateAdded = getTodayDate();
-  const defaultAmount = '10';
   
   const [creditCards, setCreditCards] = useState([]);
   const [categories, setCategories] = useState([]);
   
-  const [description, setDescription] = useState(defaultDescription);
+  const [description, setDescription] = useState();
   const [dateAdded, setDateAdded] = useState(defaultDateAdded);
-  const [amount, setAmount] = useState(defaultAmount);
+  const [amount, setAmount] = useState();
   const [paymentMethodType, setPaymentMethodType] = useState('CC');
   const [creditCard, setCreditCard] = useState();
   const [category, setCategory] = useState();
@@ -193,9 +191,9 @@ function TransactionList(props) {
         <table>
           <tbody>
             <tr>
-              <td><input type="text" name="description" onChange={(event) => setValue(event)} defaultValue={defaultDescription} maxLength="200"/></td>
+              <td><input type="text" name="description" onChange={(event) => setValue(event)} placeholder="Description" maxLength="200"/></td>
+              <td><input type="text" name="amount" onChange={(event) => setValue(event)} placeholder="Amount"/></td>
               <td><input type="date" name="dateAdded" onChange={(event) => setValue(event)} defaultValue={defaultDateAdded}/></td>
-              <td><input type="text" name="amount" onChange={(event) => setValue(event)} defaultValue={defaultAmount}/></td>
               <td>
                 <select name="paymentMethodType" onChange={(event) => setValue(event)}>
                   {
@@ -255,8 +253,8 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
     <tr key={index}>
       <td>{ transaction.id }</td>
       <td><input type="text" name="description" onChange={(event) => setValue(event)} defaultValue={transaction.description} maxLength="200"/></td>
-      <td><input type="date" name="dateAdded" onChange={(event) => setValue(event)} defaultValue={transaction.date_added}/></td>
       <td>$<input type="text" name="amount" onChange={(event) => setValue(event)} defaultValue={transaction.amount}/></td>
+      <td><input type="date" name="dateAdded" onChange={(event) => setValue(event)} defaultValue={transaction.date_added}/></td>
       <td>
         <select name="paymentMethodType" onChange={(event) => setValue(event)} defaultValue={transaction.payment_method_type}>
           {
@@ -287,13 +285,14 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
         </select>
       </td>
       <td><button type="button" onClick={(event) => {submitEditHandler(event, transaction.id)}}>Submit</button></td>
+      <td></td>
     </tr>
     :
     <tr key={index}>
       <td>{ transaction.id }</td>
       <td>{transaction.description}</td>
-      <td>{formatDate(transaction.date_added)}</td>
       <td>${ transaction.amount }</td>
+      <td>{formatDate(transaction.date_added)}</td>
       <td>{ paymentMethods[transaction.payment_method_type] }</td>
       <td>{ transaction.credit_card ? transaction.credit_card.name : '' }</td>
       <td>{ transaction.category ? transaction.category.name : '' }</td>
@@ -332,8 +331,8 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
               <tr>
                 <th>Id</th>
                 <th>Description</th>
-                <th>Date</th>
                 <th>Amount</th>
+                <th>Date</th>
                 <th>Payment method</th>
                 <th>Credit card</th>
                 <th>Category</th>
