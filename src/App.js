@@ -8,6 +8,7 @@ import {
 import { withRouter } from 'react-router';
 
 import AccountsAPI from './components/AccountsAPI';
+import CreditCards from './components/CreditCards';
 import Hello from './components/Hello';
 import Login from './components/Login';
 import Nav from './components/Nav';
@@ -120,6 +121,7 @@ class App extends Component {
                     <ul>
                       <li><Link className={"nav-link"} to={"/hello/"}>Hello</Link></li>
                       <li><Link className={"nav-link"} to={"/accounts/"}>Accounts</Link></li>
+                      <li><Link className={"nav-link"} to={"/creditcards/"}>Credit Cards</Link></li>
                       <li><Link className={"nav-link"} to={"/transactions/"}>Transactions</Link></li>
                       <li><Link className={"nav-link"} to={"/login/"}>Login</Link></li>
                     </ul>
@@ -133,6 +135,8 @@ class App extends Component {
                     />
                     <Route exact path={"/hello/"} component={Hello}/>
                     <Route exact path={"/accounts/"} component={AccountsAPI}/>
+                    <Route exact path={"/creditcards/"} component={CreditCards}/>
+                    <Route exact path={"/accounts/:id/creditcards/"} component={CreditCards}/>
                     <Route exact path={"/transactions/"} component={TransactionsAPI}/>
                     <Route path={"/"} render={() => <div>Home again</div>}/>
                </Switch>
