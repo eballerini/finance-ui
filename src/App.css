@@ -81,6 +81,10 @@ th {
   display: none;
 }
 
+.credit_cards .inactive {
+  background-color: darkorange;
+}
+
 input[type=text] {
   padding: 5px 5px;
   box-sizing: border-box;

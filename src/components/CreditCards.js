@@ -28,7 +28,7 @@ function CreditCardTableRow(props) {
   const creditCard = props.creditCard;
   
   return (
-    <tr>
+    <tr className={creditCard.cancellation_date ? 'inactive' : 'active'}>
       <td>{creditCard.id}</td>
       <td>{creditCard.name}</td>
       <td>{creditCard.application_date ? formatDate(creditCard.application_date) : ''}</td>
@@ -71,7 +71,7 @@ function CreditCards(props) {
       </div>
       <div>
         {creditCards && creditCards.length > 0
-        ? <div>
+        ? <div className="credit_cards">
             <table>
               <CreditCardTableHeader/>
               <tbody>
