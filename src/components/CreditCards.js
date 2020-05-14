@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import axiosInstance from '../axiosApi';
 import { formatDate } from '../utils';
 
@@ -28,23 +28,21 @@ function CreditCardTableRow(props) {
   const creditCard = props.creditCard;
   
   return (
-    <Fragment>
-      <tr>
-        <td>{creditCard.id}</td>
-        <td>{creditCard.name}</td>
-        <td>{creditCard.application_date ? formatDate(creditCard.application_date) : ''}</td>
-        <td>{creditCard.deadline_minimum_spending ? formatDate(creditCard.deadline_minimum_spending) : ''}</td>
-        <td>{creditCard.approval_date ? formatDate(creditCard.approval_date) : ''}</td>
-        <td>{creditCard.cancellation_date ? formatDate(creditCard.cancellation_date) : ''}</td>
-        <td>{creditCard.mininum_spending ? '$' + creditCard.mininum_spending : ''}</td>
-        <td>{creditCard.signup_bonus}</td>
-        <td>{creditCard.first_year_fee ? '$' + creditCard.first_year_fee : ''}</td>
-        <td>{creditCard.annual_fee ? '$' + creditCard.annual_fee : ''}</td>
-        <td>{creditCard.cycle_day}</td>
-        <td>{creditCard.earning_rates}</td>
-        <td>{creditCard.account.name}</td>
-      </tr>
-    </Fragment>
+    <tr>
+      <td>{creditCard.id}</td>
+      <td>{creditCard.name}</td>
+      <td>{creditCard.application_date ? formatDate(creditCard.application_date) : ''}</td>
+      <td>{creditCard.deadline_minimum_spending ? formatDate(creditCard.deadline_minimum_spending) : ''}</td>
+      <td>{creditCard.approval_date ? formatDate(creditCard.approval_date) : ''}</td>
+      <td>{creditCard.cancellation_date ? formatDate(creditCard.cancellation_date) : ''}</td>
+      <td>{creditCard.mininum_spending ? '$' + creditCard.mininum_spending : ''}</td>
+      <td>{creditCard.signup_bonus}</td>
+      <td>{creditCard.first_year_fee ? '$' + creditCard.first_year_fee : ''}</td>
+      <td>{creditCard.annual_fee ? '$' + creditCard.annual_fee : ''}</td>
+      <td>{creditCard.cycle_day}</td>
+      <td>{creditCard.earning_rates}</td>
+      <td>{creditCard.account.name}</td>
+    </tr>
   );
 }
 
