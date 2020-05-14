@@ -43,3 +43,22 @@ export function getTodayDate() {
   } 
   return yyyy + "-" + mm + "-" + dd
 }
+
+export function formatAmount(amount) {
+  return formatNumber(amount, '$');
+}
+
+export function formatSignupBonus(number) {
+  return formatNumber(number);
+}
+
+function formatNumber(number, prefix = '') {
+  var formattedNumber;
+  if (number) {
+    formattedNumber = prefix + Number(number).toLocaleString();
+  } else {
+    formattedNumber = '';
+  }
+  
+  return formattedNumber;
+}
