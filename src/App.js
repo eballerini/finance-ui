@@ -5,16 +5,22 @@ import {
   Route,
   Link,
 } from "react-router-dom";
+import { withRouter } from 'react-router';
 
-import Nav from './components/Nav';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
 import AccountsAPI from './components/AccountsAPI';
+import CreditCards from './components/CreditCards';
+import Hello from './components/Hello';
+import Login from './components/Login';
+import Nav from './components/Nav';
+import SignupForm from './components/SignupForm';
 import TransactionsAPI from './components/TransactionsAPI';
 
 import './App.css';
 
+import axiosInstance from './axiosApi';
+
 class App extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +28,26 @@ class App extends Component {
       logged_in: localStorage.getItem('token') ? true : false,
       username: ''
     };
+    this.handleLogout = this.handleLogout.bind(this);
   }
+  
+  async handleLogout() {
+    try {
+        const response = await axiosInstance.post('/blacklist/', {
+            "refresh_token": localStorage.getItem("refresh_token")
+        });
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        axiosInstance.defaults.headers['Authorization'] = null;
+        console.log('successfully logged out');
+        this.setState({ logged_in: false, username: '' });
+        this.props.history.push('/login');
+        return response;
+    }
+    catch (e) {
+        console.log(e);
+    }
+  };
 
   componentDidMount() {
     if (this.state.logged_in) {
@@ -37,25 +62,30 @@ class App extends Component {
         });
     }
   }
-
-  handle_login = (e, data) => {
-    e.preventDefault();
-    fetch('http://localhost:8080/token-auth/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then(json => {
-        localStorage.setItem('token', json.token);
-        this.setState({
-          logged_in: true,
-          displayed_form: '',
-          username: json.user.username
-        });
-      });
+  
+  handleSubmit = (event, username, password)  => {
+      event.preventDefault();
+      axiosInstance.post('/token/obtain/', {
+          username: username,
+          password: password
+      }).then(
+          result => {
+            const access_token = result.data.access;
+            const parsed_token = JSON.parse(atob(access_token.split('.')[1]));
+            const username = parsed_token.username;
+            console.log(username);
+            axiosInstance.defaults.headers['Authorization'] = "JWT " + access_token;
+            localStorage.setItem('access_token', access_token);
+            localStorage.setItem('refresh_token', result.data.refresh);
+            this.setState({
+              logged_in: true,
+              username: username
+            });
+            this.props.history.push('/accounts');
+          }
+      ).catch (error => {
+          throw error;
+      })
   };
 
   handle_signup = (e, data) => {
@@ -77,51 +107,41 @@ class App extends Component {
         });
       });
   };
-
-  handle_logout = () => {
-    localStorage.removeItem('token');
-    this.setState({ logged_in: false, username: '' });
-  };
-
-  display_form = form => {
-    this.setState({
-      displayed_form: form
-    });
-  };
-
-  render() {
-    let form;
-    switch (this.state.displayed_form) {
-      case 'login':
-        form = <LoginForm handle_login={this.handle_login} />;
-        break;
-      case 'signup':
-        form = <SignupForm handle_signup={this.handle_signup} />;
-        break;
-      default:
-        form = null;
-    }
-
+  
+  render(){
     return (
-      <div className="App">
-
-        {/*
-        <Nav
-          logged_in={this.state.logged_in}
-          display_form={this.display_form}
-          handle_logout={this.handle_logout}
-        />
-        {form}
-        */}
-        <div>
-          {this.state.logged_in
-            ? <Menu handle_logout={this.handle_logout} username={this.state.username}/>
-            : <div>
-               <LoginForm handle_login={this.handle_login} />
-              </div>
-            }
+        <div className="site row">
+            <nav className="column side">
+                {this.state.logged_in
+                  ? 'logged in'
+                  : 'not logged in'
+                }
+                  <>
+                    <p>Hello, {this.state.username}</p>
+                    <ul>
+                      <li><Link className={"nav-link"} to={"/hello/"}>Hello</Link></li>
+                      <li><Link className={"nav-link"} to={"/accounts/"}>Accounts</Link></li>
+                      <li><Link className={"nav-link"} to={"/creditcards/"}>Credit Cards</Link></li>
+                      <li><Link className={"nav-link"} to={"/transactions/"}>Transactions</Link></li>
+                      <li><Link className={"nav-link"} to={"/login/"}>Login</Link></li>
+                    </ul>
+                    <button onClick={this.handleLogout}>Logout</button>
+                  </>
+            </nav>
+            <main className="column middle">
+                <Switch>
+                    <Route exact path={"/login/"} 
+                    render={(props) => <Login {...props} handle_submit={this.handleSubmit} />}
+                    />
+                    <Route exact path={"/hello/"} component={Hello}/>
+                    <Route exact path={"/accounts/"} component={AccountsAPI}/>
+                    <Route exact path={"/creditcards/"} component={CreditCards}/>
+                    <Route exact path={"/accounts/:id/creditcards/"} component={CreditCards}/>
+                    <Route exact path={"/transactions/"} component={TransactionsAPI}/>
+                    <Route path={"/"} render={() => <div>Home again</div>}/>
+               </Switch>
+           </main>
         </div>
-      </div>
     );
   }
 }
@@ -142,9 +162,6 @@ function Menu(props) {
               </li>
               <li>
                 <Link to="/transactions">Transactions</Link>
-              </li>
-              <li>
-                <a href="/login" onClick={props.handle_logout}>Logout</a>
               </li>
             </ul>
           </nav>
@@ -172,4 +189,4 @@ function Menu(props) {
   );
 }
 
-export default App;
+export default withRouter(App);

@@ -1,26 +1,18 @@
 import React, { useState, useEffect } from "react";
 import '../App.css';
 import AccountList from './Accounts.js';
+import axiosInstance from '../axiosApi';
 
 function AccountsAPI() {
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // TODO move this to a function
   useEffect(() => {
-    fetch(
-      `http://localhost:8080/expense/api/accounts/`,
-      {
-        method: "GET",
-        headers: new Headers({
-          Authorization: `JWT ${localStorage.getItem('token')}`,
-        })
-      }
-    )
-      .then(res => res.json())
+    axiosInstance.get(`api/accounts/`)
       .then(response => {
-        setAccounts(response);
         setIsLoading(false);
+        setAccounts(response.data);
+        console.log('accounts loaded');
       })
       .catch(error => console.log(error));
   }, []);

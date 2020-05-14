@@ -73,6 +73,14 @@ th {
   margin-bottom: 30px;
 }
 
+.transaction-list td {
+  max-width: 350px;
+}
+
+.hidden {
+  display: none;
+}
+
 input[type=text] {
   padding: 5px 5px;
   box-sizing: border-box;
