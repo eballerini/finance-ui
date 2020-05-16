@@ -1,10 +1,10 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { formatDate, getTodayDate } from '../utils';
+import { formatDate, convertToString } from '../utils';
 
 import axiosInstance from '../axiosApi';
 
 function TransactionList(props) {  
-  const defaultDateAdded = getTodayDate();
+  const defaultDateAdded = convertToString(new Date());
   
   const [creditCards, setCreditCards] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -326,7 +326,7 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
   return (
     <div className="transaction-list">
         <form className="transaction-edit">
-          <table>
+          <table className="list">
             <thead>
               <tr>
                 <th>Id</th>

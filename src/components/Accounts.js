@@ -29,7 +29,7 @@ function showAccounts(accounts) {
   
   return (
     <div>
-      <table>
+      <table className="list">
         <thead>
           <tr>
             <th>Id</th>

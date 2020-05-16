@@ -26,12 +26,11 @@ export function formatDate(input) {
   return formattedDate;
 }
 
-export function getTodayDate() {
-  var today = new Date();
-  var dd = today.getDate();
+export function convertToString(date) {
+  var dd = date.getDate();
 
-  var mm = today.getMonth()+1; 
-  var yyyy = today.getFullYear();
+  var mm = date.getMonth()+1; 
+  var yyyy = date.getFullYear();
   if (dd < 10) {
       dd = '0' + dd;
   } 
@@ -39,6 +38,15 @@ export function getTodayDate() {
       mm = '0' + mm;
   }
   return yyyy + "-" + mm + "-" + dd;
+}
+
+export function addMonths(date, months) {
+    var d = date.getDate();
+    date.setMonth(date.getMonth() + +months);
+    if (date.getDate() != d) {
+      date.setDate(0);
+    }
+    return date;
 }
 
 export function formatAmount(amount) {

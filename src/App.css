@@ -16,9 +16,9 @@ td, th {
   padding: 8px;
 }
 
-tr:nth-child(even){background-color: #f2f2f2;}
+.list tr:nth-child(even){background-color: #f2f2f2;}
 
-tr:hover {background-color: #ddd;}
+.list tr:hover {background-color: #ddd;}
 
 th {
   padding-top: 12px;
@@ -53,6 +53,16 @@ th {
   content: "";
   display: table;
   clear: both;
+}
+
+table.input_form {
+  border-collapse: collapse;
+  border-style: hidden;
+}
+
+table.input_form td {
+  border-collapse: collapse;
+  border-style: hidden;
 }
 
 #transaction tr:hover {
