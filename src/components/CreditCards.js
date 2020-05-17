@@ -209,14 +209,6 @@ function CreditCards(props) {
         <h1>Your credit cards</h1>
       </div>
       <div>
-        <div>
-        {addMode
-        ? <button onClick={() => setAddMode(false)}>Cancel</button>
-        : <button onClick={() => setAddMode(true)}>Add new credit card</button>
-        }
-        </div>
-        <CreditCardTableForm addMode={addMode} />
-        <br/>
         {creditCards && creditCards.length > 0
         ? <div className="credit_cards">
             <table className="list">
@@ -231,6 +223,14 @@ function CreditCards(props) {
       <div>
         {isLoading && <p>Loading credit cards</p>}
       </div>
+      <br/>
+      <div>
+        {addMode
+        ? <button onClick={() => setAddMode(false)}>Cancel</button>
+        : <button onClick={() => setAddMode(true)}>Add new credit card</button>
+        }
+      </div>
+      <CreditCardTableForm addMode={addMode} />
     </div>
   );
   
