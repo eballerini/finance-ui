@@ -112,7 +112,7 @@ function CreditCardTableForm(props) {
   
   return (
     <div className={addMode ? '' : 'hidden'}>
-      <p>New credit card</p>TODO only show this on click 'add'
+      <p>New credit card</p>
       <form id="new_creditcard" onSubmit={(event) => mySubmitHandler(event)}>
         <table className="input_form">
           <tbody>
@@ -209,8 +209,13 @@ function CreditCards(props) {
         <h1>Your credit cards</h1>
       </div>
       <div>
-        <div><button onClick={() => setAddMode(true)}>Add new credit card</button></div>
-        <CreditCardTableForm addMode={true} />
+        <div>
+        {addMode
+        ? <button onClick={() => setAddMode(false)}>Cancel</button>
+        : <button onClick={() => setAddMode(true)}>Add new credit card</button>
+        }
+        </div>
+        <CreditCardTableForm addMode={addMode} />
         <br/>
         {creditCards && creditCards.length > 0
         ? <div className="credit_cards">
