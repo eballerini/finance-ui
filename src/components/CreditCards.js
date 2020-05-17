@@ -12,7 +12,7 @@ function CreditCardTableHeader(props) {
         <th>Deadline for minimum spending</th>
         <th>Approval date</th>
         <th>Cancellation date</th>
-        <th>Mininum spending</th>
+        <th>Minimum spending</th>
         <th>Signup bonus</th>
         <th>First year fee</th>
         <th>Annual fee</th>
@@ -35,7 +35,7 @@ function CreditCardTableRow(props) {
       <td>{creditCard.deadline_minimum_spending ? formatDate(creditCard.deadline_minimum_spending) : ''}</td>
       <td>{creditCard.approval_date ? formatDate(creditCard.approval_date) : ''}</td>
       <td>{creditCard.cancellation_date ? formatDate(creditCard.cancellation_date) : ''}</td>
-      <td>{formatAmount(creditCard.mininum_spending)}</td>
+      <td>{formatAmount(creditCard.minimum_spending)}</td>
       <td>{formatSignupBonus(creditCard.signup_bonus)}</td>
       <td>{formatAmount(creditCard.first_year_fee)}</td>
       <td>{formatAmount(creditCard.annual_fee)}</td>
