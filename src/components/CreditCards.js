@@ -26,10 +26,13 @@ function CreditCardTableHeader(props) {
 
 function CreditCardTableRow(props) {
   const creditCard = props.creditCard;
+  const populateMode = props.populateMode;
+  const selectCreditCard = props.selectCreditCard;
+  const creditCardSelected = props.creditCardSelected;
   
   return (
     <tr className={creditCard.cancellation_date ? 'inactive' : 'active'}>
-      <td>{creditCard.id}</td>
+      <td>{populateMode ? <button onClick={() => {selectCreditCard(creditCard)}} disabled={creditCardSelected}>Edit</button> : creditCard.id}</td>
       <td>{creditCard.name}</td>
       <td>{creditCard.application_date ? formatDate(creditCard.application_date) : ''}</td>
       <td>{creditCard.deadline_minimum_spending ? formatDate(creditCard.deadline_minimum_spending) : ''}</td>
@@ -51,7 +54,8 @@ function CreditCardTableForm(props) {
   const threeMonthsFromNow = convertToString(addMonths(new Date(), 3));
   
   const [accounts, setAccounts] = useState([]);
-  
+
+  const [id, setId] = useState();
   const [name, setName] = useState();
   const [applicationDate, setApplicationDate] = useState(today);
   const [deadlineMinimumSpending, setDeadlineMinimumSpending] = useState(threeMonthsFromNow);
@@ -65,7 +69,44 @@ function CreditCardTableForm(props) {
   const [earningRates, setEarningRates] = useState();
   const [account, setAccount] = useState();
 
+  const selectedCreditCard = props.selectedCreditCard;
   const addMode = props.addMode;
+  const editMode = props.editMode;
+  
+  useEffect(() => {
+    console.log('loading form');
+    if (selectedCreditCard) {
+      console.log('selectedCreditCard');
+      console.log(selectedCreditCard);
+      setId(selectedCreditCard.id);
+      setName(selectedCreditCard.name);
+      setApplicationDate(selectedCreditCard.application_date);
+      setDeadlineMinimumSpending(selectedCreditCard.deadline_minimum_spending);
+      setApprovalDate(selectedCreditCard.approval_date);
+      setCancellationDate(selectedCreditCard.cancellation_date);
+      setMinimumSpending(selectedCreditCard.minimum_spending);
+      setSignupBonus(selectedCreditCard.signup_bonus);
+      setFirstYearFee(selectedCreditCard.first_year_fee);
+      setAnnualFee(selectedCreditCard.annual_fee);
+      setCycleDay(selectedCreditCard.cycle_day);
+      setEarningRates(selectedCreditCard.earning_rates);
+      setAccount(selectedCreditCard.account.id);
+    } else {
+      setId();
+      setName('');
+      setApplicationDate(today);
+      setDeadlineMinimumSpending(threeMonthsFromNow);
+      setApprovalDate();
+      setCancellationDate();
+      setMinimumSpending();
+      setSignupBonus();
+      setFirstYearFee();
+      setAnnualFee();
+      setCycleDay();
+      setEarningRates();
+      setAccount();
+    }
+  }, []);
   
   useEffect(() => {
     axiosInstance.get(`api/accounts/`)
@@ -81,89 +122,151 @@ function CreditCardTableForm(props) {
     event.preventDefault();
     const payload = {
       name: name,
-      application_date: applicationDate,
-      deadline_minimum_spending: deadlineMinimumSpending,
-      approval_date: approvalDate,
-      cancellation_date: cancellationDate,
-      minimum_spending: minimumSpending,
-      signup_bonus: signupBonus,
       first_year_fee: firstYearFee,
       annual_fee: annualFee,
-      cycle_day: cycleDay,
-      earning_rates: earningRates,
       account: account,
+    }
+    if (applicationDate) {
+      payload.application_date = applicationDate;
+    } else {
+      payload.application_date = null;
+    }
+    if (cancellationDate) {
+      payload.cancellation_date = cancellationDate;
+    } else {
+      payload.cancellation_date = null;
+    }
+    if (deadlineMinimumSpending) {
+      payload.deadline_minimum_spending = deadlineMinimumSpending;
+    } else {
+      payload.deadline_minimum_spending = null;
+    }
+    if (approvalDate) {
+      payload.approval_date = approvalDate;
+    } else {
+      payload.approval_date = null;
+    }
+    if (signupBonus) {
+      payload.signup_bonus = signupBonus;
+    } else {
+      payload.signup_bonus = null;
+    }
+    if (cycleDay) {
+      payload.cycle_day = cycleDay;
+    } else {
+      payload.cycle_day = null;
+    }
+    if (earningRates) {
+      payload.earning_rates = earningRates;
+    } else {
+      payload.earning_rates = null;
+    }
+    if (minimumSpending) {
+      payload.minimum_spending = minimumSpending;
+    } else {
+      payload.minimum_spending = null;
     }
     console.log('submit payload: ');
     console.log(payload);
-    axiosInstance.post('api/creditcards/', payload)
-    .then(
-        result => {
-          console.log('success: credit card created');
-          // TODO ideally we'd only reload the transactions rather than the whole page
-          window.location.reload(false);
-        }
-    )
-      .catch(error => {
-          console.error('There was an error!', error);
-          alert('failed:' + error);
-          // this.setState({ errorMessage: error });
-      });
+    const url = 'api/creditcards/';
+    if (id) {
+      axiosInstance.put(url + id + '/', payload)
+        .then(
+            result => {
+              console.log('success: credit card created');
+              // TODO ideally we'd only reload the transactions rather than the whole page
+              window.location.reload(false);
+            }
+        )
+        .catch(error => {
+            console.error('There was an error!', error);
+            alert('failed:' + error);
+            // this.setState({ errorMessage: error });
+        });
+    } else {
+      axiosInstance.post(url, payload)
+      .then(
+          result => {
+            console.log('success: credit card created');
+            // TODO ideally we'd only reload the transactions rather than the whole page
+            window.location.reload(false);
+          }
+      )
+        .catch(error => {
+            console.error('There was an error!', error);
+            alert('failed:' + error);
+            // this.setState({ errorMessage: error });
+        });
+    }
+    // axiosInstance.post(url, payload)
+    // .then(
+    //     result => {
+    //       console.log('success: credit card created');
+    //       // TODO ideally we'd only reload the transactions rather than the whole page
+    //       window.location.reload(false);
+    //     }
+    // )
+    //   .catch(error => {
+    //       console.error('There was an error!', error);
+    //       alert('failed:' + error);
+    //       // this.setState({ errorMessage: error });
+    //   });
   }
   
   return (
-    <div className={addMode ? '' : 'hidden'}>
-      <p>New credit card</p>
+    <div className={addMode || editMode ? '' : 'hiddenX'}>
+      <p>{addMode ? 'Add new' : 'Edit'} credit card</p>
       <form id="new_creditcard" onSubmit={(event) => mySubmitHandler(event)}>
         <table className="input_form">
           <tbody>
             <tr>
               <td>Name*</td>
-              <td><input type="text" name="name" onChange={(event) => setName(event.target.value)} placeholder="Name" maxLength="50"/></td>
+              <td><input type="text" name="name" value={name || ''} onChange={(event) => setName(event.target.value)} placeholder="Name" maxLength="50"/></td>
             </tr>
             <tr>
               <td>Application date</td>
-              <td><input type="date" name="applicationDate" onChange={(event) => setApplicationDate(event.target.value)} defaultValue={today}/></td>
+              <td><input type="date" name="applicationDate" value={applicationDate || ''} onChange={(event) => setApplicationDate(event.target.value)}/></td>
             </tr>
             <tr>
               <td>Deadline for minimum spending</td>
-              <td><input type="date" name="deadlineMinimumSpending" onChange={(event) => setDeadlineMinimumSpending(event.target.value)} defaultValue={threeMonthsFromNow}/></td>
+              <td><input type="date" name="deadlineMinimumSpending" value={deadlineMinimumSpending || ''} onChange={(event) => setDeadlineMinimumSpending(event.target.value)}/></td>
             </tr>
             <tr>
               <td>Approval date</td>
-              <td><input type="date" name="approvalDate" onChange={(event) => setApprovalDate(event.target.value)}/></td>
+              <td><input type="date" name="approvalDate" value={approvalDate || ''} onChange={(event) => setApprovalDate(event.target.value)}/></td>
             </tr>
             <tr>
               <td>Cancellation date</td>
-              <td><input type="date" name="cancellationDate" onChange={(event) => setCancellationDate(event.target.value)}/></td>
+              <td><input type="date" name="cancellationDate" value={cancellationDate || ''} onChange={(event) => setCancellationDate(event.target.value)}/></td>
             </tr>
             <tr>
               <td>Minimum spending ($)</td>
-              <td><input type="text" name="minimumSpending" onChange={(event) => setMinimumSpending(event.target.value)} placeholder="Minimum spending"/></td>
+              <td><input type="text" name="minimumSpending" value={minimumSpending || ''} onChange={(event) => setMinimumSpending(event.target.value)} placeholder="Minimum spending"/></td>
             </tr>
             <tr>
               <td>Signup bonus</td>
-              <td><input type="text" name="signupBonus" onChange={(event) => setSignupBonus(event.target.value)} placeholder="Signup bonus"/></td>
+              <td><input type="text" name="signupBonus" value={signupBonus || ''} onChange={(event) => setSignupBonus(event.target.value)} placeholder="Signup bonus"/></td>
             </tr>
             <tr>
               <td>First year fee*</td>
-              <td><input type="text" name="firstYearFee" onChange={(event) => setFirstYearFee(event.target.value)} placeholder="First year fee"/></td>
+              <td><input type="text" name="firstYearFee" value={firstYearFee || ''} onChange={(event) => setFirstYearFee(event.target.value)} placeholder="First year fee"/></td>
             </tr>
             <tr>
               <td>Annual fee*</td>
-              <td><input type="text" name="annualFee" onChange={(event) => setAnnualFee(event.target.value)} placeholder="Annual fee"/></td>
+              <td><input type="text" name="annualFee" value={annualFee || ''} onChange={(event) => setAnnualFee(event.target.value)} placeholder="Annual fee"/></td>
             </tr>
             <tr>
               <td>Cycle day</td>
-              <td><input type="text" name="cycleDay" onChange={(event) => setCycleDay(event.target.value)} placeholder="Cycle day"/></td>
+              <td><input type="text" name="cycleDay" value={cycleDay || ''} onChange={(event) => setCycleDay(event.target.value)} placeholder="Cycle day"/></td>
             </tr>
             <tr>
               <td>Earning rates</td>
-              <td><textarea name="earningRates" onChange={(event) => setEarningRates(event.target.value)} placeholder="Earning rates" maxLength="200" rows="4" cols="40"/></td>
+              <td><textarea name="earningRates" value={earningRates || ''} onChange={(event) => setEarningRates(event.target.value)} placeholder="Earning rates" maxLength="200" rows="4" cols="40"/></td>
             </tr>
             <tr>
-              <td>Account</td>
+              <td>Account*</td>
               <td>
-                <select name="account" onChange={(event) => setAccount(event.target.value)}>
+                <select name="account" onChange={(event) => setAccount(event.target.value)} value={account ? account : -1}>
                   <option key="-1" value="-1">-</option>
                   {
                     accounts.map((account, index) => (
@@ -188,6 +291,9 @@ function CreditCards(props) {
   const [creditCards, setCreditCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [addMode, setAddMode] = useState(false);
+  const [enableEditMode, setEnableEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [selectedCreditCard, setSelectedCreditCard] = useState();
   
   useEffect(() => {
     axiosInstance.get(`api/creditcards/`)
@@ -197,11 +303,18 @@ function CreditCards(props) {
         console.log('credit cards loaded');
       })
       .catch(error => console.log(error));
-  }, []);
+  }, []);  
   
   const creditCardList = creditCards.map((creditCard, index) =>
-    <CreditCardTableRow creditCard={creditCard} key={index}/>
+    <CreditCardTableRow creditCard={creditCard} key={index} populateMode={enableEditMode} selectCreditCard={(creditCard) =>  { setSelectedCreditCard(creditCard); setEditMode(true); }} creditCardSelected={selectedCreditCard}/>
   );
+  
+  function resetState() {
+    setAddMode(false);
+    setEnableEditMode(false);
+    setEditMode(false);
+    setSelectedCreditCard();
+  }
   
   return (
     <div>
@@ -226,11 +339,25 @@ function CreditCards(props) {
       <br/>
       <div>
         {addMode
-        ? <button onClick={() => setAddMode(false)}>Cancel</button>
-        : <button onClick={() => setAddMode(true)}>Add new credit card</button>
+        ? <button onClick={() => resetState()}>Cancel</button>
+        :
+        <>
+          <button onClick={() => setAddMode(true)} disabled={enableEditMode}>Add new credit card</button>
+        </>
+        }
+        {enableEditMode
+        ? <button onClick={() => resetState()}>Cancel</button>
+        :
+        <>
+          <button onClick={() => setEnableEditMode(true)} disabled={addMode}>Edit</button>
+        </>
         }
       </div>
-      <CreditCardTableForm addMode={addMode} />
+      {addMode || editMode
+      ? <CreditCardTableForm addMode={addMode} editMode={editMode} selectedCreditCard={selectedCreditCard}/>
+      : ''
+      }
+      
     </div>
   );
   

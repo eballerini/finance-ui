@@ -92,7 +92,7 @@ table.input_form td {
 }
 
 .credit_cards .inactive {
-  background-color: darkorange;
+  background-color: darkorange !important;
 }
 
 input[type=text] {
