@@ -29,10 +29,25 @@ function CreditCardTableRow(props) {
   const populateMode = props.populateMode;
   const selectCreditCard = props.selectCreditCard;
   const creditCardSelected = props.creditCardSelected;
+  const handleDelete = props.handleDelete;
   
   return (
     <tr className={creditCard.cancellation_date ? 'inactive' : 'active'}>
-      <td>{populateMode ? <button onClick={() => {selectCreditCard(creditCard)}} disabled={creditCardSelected}>Edit</button> : creditCard.id}</td>
+      <td>
+        {populateMode 
+          ? 
+          <>
+            <button onClick={() => {selectCreditCard(creditCard)}} disabled={creditCardSelected}>Edit</button> 
+            <button type="button" disabled={creditCardSelected} onClick={(event) => {
+              if (window.confirm('Are you sure you want to delete this credit card?')) {
+                handleDelete(event, creditCard.id);
+              } else {
+                console.log('Delete cancelled');
+              }
+            }}>Delete</button>
+          </>
+          : creditCard.id}
+      </td>
       <td>{creditCard.name}</td>
       <td>{creditCard.application_date ? formatDate(creditCard.application_date) : ''}</td>
       <td>{creditCard.deadline_minimum_spending ? formatDate(creditCard.deadline_minimum_spending) : ''}</td>
@@ -198,19 +213,6 @@ function CreditCardTableForm(props) {
             // this.setState({ errorMessage: error });
         });
     }
-    // axiosInstance.post(url, payload)
-    // .then(
-    //     result => {
-    //       console.log('success: credit card created');
-    //       // TODO ideally we'd only reload the transactions rather than the whole page
-    //       window.location.reload(false);
-    //     }
-    // )
-    //   .catch(error => {
-    //       console.error('There was an error!', error);
-    //       alert('failed:' + error);
-    //       // this.setState({ errorMessage: error });
-    //   });
   }
   
   return (
@@ -303,10 +305,35 @@ function CreditCards(props) {
         console.log('credit cards loaded');
       })
       .catch(error => console.log(error));
-  }, []);  
+  }, []);
+  
+  function handleDelete(event, credit_card_id) {
+    event.preventDefault();
+    const payload = {};
+    console.log('id: ' + credit_card_id);
+    axiosInstance.delete('api/creditcards/' + credit_card_id + '/', payload)
+    .then(
+        result => {
+          console.log('success: credit card deleted');
+          // TODO ideally we'd only reload the credit cards rather than the whole page
+          window.location.reload();
+        }
+    )
+      .catch(error => {
+          console.error('There was an error!', error);
+          alert('failed:' + error);
+          // this.setState({ errorMessage: error });
+      });
+  }
   
   const creditCardList = creditCards.map((creditCard, index) =>
-    <CreditCardTableRow creditCard={creditCard} key={index} populateMode={enableEditMode} selectCreditCard={(creditCard) =>  { setSelectedCreditCard(creditCard); setEditMode(true); }} creditCardSelected={selectedCreditCard}/>
+    <CreditCardTableRow 
+      creditCard={creditCard} 
+      key={index} 
+      populateMode={enableEditMode} 
+      selectCreditCard={(creditCard) =>  { setSelectedCreditCard(creditCard); setEditMode(true); }} creditCardSelected={selectedCreditCard} 
+      handleDelete={(event, credit_card_id) => handleDelete(event, credit_card_id)}
+    />
   );
   
   function resetState() {
