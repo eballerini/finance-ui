@@ -86,13 +86,9 @@ function CreditCardTableForm(props) {
 
   const selectedCreditCard = props.selectedCreditCard;
   const addMode = props.addMode;
-  const editMode = props.editMode;
   
   useEffect(() => {
-    console.log('loading form');
     if (selectedCreditCard) {
-      console.log('selectedCreditCard');
-      console.log(selectedCreditCard);
       setId(selectedCreditCard.id);
       setName(selectedCreditCard.name);
       setApplicationDate(selectedCreditCard.application_date);
@@ -106,20 +102,6 @@ function CreditCardTableForm(props) {
       setCycleDay(selectedCreditCard.cycle_day);
       setEarningRates(selectedCreditCard.earning_rates);
       setAccount(selectedCreditCard.account.id);
-    } else {
-      setId();
-      setName('');
-      setApplicationDate(today);
-      setDeadlineMinimumSpending(threeMonthsFromNow);
-      setApprovalDate();
-      setCancellationDate();
-      setMinimumSpending();
-      setSignupBonus();
-      setFirstYearFee();
-      setAnnualFee();
-      setCycleDay();
-      setEarningRates();
-      setAccount();
     }
   }, []);
   
@@ -216,7 +198,7 @@ function CreditCardTableForm(props) {
   }
   
   return (
-    <div className={addMode || editMode ? '' : 'hiddenX'}>
+    <div>
       <p>{addMode ? 'Add new' : 'Edit'} credit card</p>
       <form id="new_creditcard" onSubmit={(event) => mySubmitHandler(event)}>
         <table className="input_form">
@@ -381,7 +363,7 @@ function CreditCards(props) {
         }
       </div>
       {addMode || editMode
-      ? <CreditCardTableForm addMode={addMode} editMode={editMode} selectedCreditCard={selectedCreditCard}/>
+      ? <CreditCardTableForm addMode={addMode} selectedCreditCard={selectedCreditCard}/>
       : ''
       }
       
