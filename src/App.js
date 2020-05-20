@@ -9,6 +9,7 @@ import { withRouter } from 'react-router';
 
 import AccountsAPI from './components/AccountsAPI';
 import CreditCards from './components/CreditCards';
+import Dashboard from './components/Dashboard';
 import Hello from './components/Hello';
 import Login from './components/Login';
 import Nav from './components/Nav';
@@ -119,7 +120,7 @@ class App extends Component {
                   <>
                     <p>Hello, {this.state.username}</p>
                     <ul>
-                      <li><Link className={"nav-link"} to={"/hello/"}>Hello</Link></li>
+                      <li><Link className={"nav-link"} to={"/dashboard/"}>Dashboard</Link></li>
                       <li><Link className={"nav-link"} to={"/accounts/"}>Accounts</Link></li>
                       <li><Link className={"nav-link"} to={"/creditcards/"}>Credit Cards</Link></li>
                       <li><Link className={"nav-link"} to={"/transactions/"}>Transactions</Link></li>
@@ -133,7 +134,7 @@ class App extends Component {
                     <Route exact path={"/login/"} 
                     render={(props) => <Login {...props} handle_submit={this.handleSubmit} />}
                     />
-                    <Route exact path={"/hello/"} component={Hello}/>
+                    <Route exact path={"/dashboard/"} component={Dashboard}/>
                     <Route exact path={"/accounts/"} component={AccountsAPI}/>
                     <Route exact path={"/creditcards/"} component={CreditCards}/>
                     <Route exact path={"/accounts/:id/creditcards/"} component={CreditCards}/>
