@@ -23,6 +23,46 @@ function CategoryRow(props) {
   );
 }
 
+function CategoryForm(props) {
+    const [name, setName] = useState();
+    
+    function mySubmitHandler(event, props) {
+      event.preventDefault();
+      const payload = {
+        name: name,
+      }
+      axiosInstance.post('api/categories/', payload)
+      .then(
+          result => {
+            console.log('success: category created');
+            // TODO ideally we'd only reload the transactions rather than the whole page
+            window.location.reload(false);
+          }
+      )
+        .catch(error => {
+            console.error('There was an error!', error);
+            // alert('failed:' + error);
+            // this.setState({ errorMessage: error });
+        });
+    }
+    
+    return (
+      <div>
+        <p>Quick add</p>
+        <form id="transaction" onSubmit={(event) => mySubmitHandler(event)}>
+          <table>
+            <tbody>
+              <tr>
+                <td><input type="text" name="name" onChange={(event) => setName(event.target.value)} placeholder="Name" maxLength="100"/></td>
+                <td><input type="submit"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
+    );
+}
+
 function Categories(props) {
   const [categories, setCategories] = useState([]);
   const categoryList = categories.map((category, index) =>
@@ -43,9 +83,12 @@ function Categories(props) {
 
   
   return (
-    <div className="title">
-      <h1>Your categories</h1>
+    <div>
+      <div className="title">
+        <h1>Your categories</h1>
+      </div>
       <div>
+        <CategoryForm />
         {categories && categories.length > 0
         ? <div className="categories">
             <table className="list">
