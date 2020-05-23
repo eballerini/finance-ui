@@ -8,6 +8,7 @@ import {
 import { withRouter } from 'react-router';
 
 import AccountsAPI from './components/AccountsAPI';
+import Categories from './components/Categories';
 import CreditCards from './components/CreditCards';
 import Dashboard from './components/Dashboard';
 import Hello from './components/Hello';
@@ -122,6 +123,7 @@ class App extends Component {
                     <ul>
                       <li><Link className={"nav-link"} to={"/dashboard/"}>Dashboard</Link></li>
                       <li><Link className={"nav-link"} to={"/accounts/"}>Accounts</Link></li>
+                      <li><Link className={"nav-link"} to={"/categories/"}>Categories</Link></li>
                       <li><Link className={"nav-link"} to={"/creditcards/"}>Credit Cards</Link></li>
                       <li><Link className={"nav-link"} to={"/transactions/"}>Transactions</Link></li>
                       <li><Link className={"nav-link"} to={"/login/"}>Login</Link></li>
@@ -136,6 +138,7 @@ class App extends Component {
                     />
                     <Route exact path={"/dashboard/"} component={Dashboard}/>
                     <Route exact path={"/accounts/"} component={AccountsAPI}/>
+                    <Route exact path={"/categories/"} component={Categories}/>
                     <Route exact path={"/creditcards/"} component={CreditCards}/>
                     <Route exact path={"/accounts/:id/creditcards/"} component={CreditCards}/>
                     <Route exact path={"/transactions/"} component={TransactionsAPI}/>
