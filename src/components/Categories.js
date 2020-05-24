@@ -23,6 +23,7 @@ function CategoryRow(props) {
   const setEditableRowId = props.setEditableRowId;
   const setName = props.setName;
   const submitEditHandler = props.submitEditHandler;
+  const submitDeleteHandler = props.submitDeleteHandler;
   
   return (
     <tr>
@@ -34,7 +35,16 @@ function CategoryRow(props) {
       <td className={isEditable ? '' : 'hidden'}>
       {category.id === editableRowId
         ? <button type="button" onClick={(event) => submitEditHandler(event)}>Submit</button>
-        : <button type="button" onClick={() => {setEditableRowId(category.id); setName(category.name)}}>Edit</button>
+        : <>
+          <button type="button" onClick={() => {setEditableRowId(category.id); setName(category.name)}}>Edit</button>
+          <button type="button" onClick={(event) => {
+            if (window.confirm('Are you sure you want to delete this category?')) {
+              submitDeleteHandler(event, category.id);
+            } else {
+              console.log('Delete cancelled');
+            }
+          }}>Delete</button>
+          </>
       }
       </td>
     </tr>
@@ -109,6 +119,24 @@ function Categories(props) {
       });
   }
   
+  function submitDeleteHandler(event, category_id) {
+    event.preventDefault();
+    const payload = {};
+    axiosInstance.delete('api/categories/' + category_id + '/', payload)
+    .then(
+        result => {
+          console.log('success: category deleted');
+          // TODO ideally we'd only reload the categories rather than the whole page
+          window.location.reload();
+        }
+    )
+      .catch(error => {
+          console.error('There was an error!', error);
+          alert('failed:' + error);
+          // this.setState({ errorMessage: error });
+      });
+  }
+  
   const categoryList = categories.map((category, index) =>
     <CategoryRow 
       category={category} 
@@ -118,6 +146,7 @@ function Categories(props) {
       editableRowId={editableRowId}
       setEditableRowId={setEditableRowId}
       submitEditHandler={submitEditHandler}
+      submitDeleteHandler={submitDeleteHandler}
       setName={setName}
     />
   );
