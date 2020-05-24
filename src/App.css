@@ -65,22 +65,26 @@ table.input_form td {
   border-style: hidden;
 }
 
-#transaction tr:hover {
+.quick-add tr:hover {
    background-color: #ffffff;
 }
 
-#transaction table {
+.quick-add table {
   border-collapse: collapse;
   border-style: hidden;
 }
 
-#transaction td {
+.quick-add td {
   border-collapse: collapse;
   border-style: hidden;
 }
 
-#transaction {
-  margin-bottom: 30px;
+.quick-add {
+  margin-bottom: 20px;
+}
+
+.buttons {
+  margin-bottom: 20px;
 }
 
 .transaction-list td {

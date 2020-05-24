@@ -187,7 +187,7 @@ function TransactionList(props) {
         <h1>Your transactions</h1>
       </div>
       <span>Quick add</span>
-      <form id="transaction" onSubmit={(event) => mySubmitHandler(event)}>
+      <form className="quick-add" onSubmit={(event) => mySubmitHandler(event)}>
         <table>
           <tbody>
             <tr>
