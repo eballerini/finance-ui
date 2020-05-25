@@ -29,7 +29,7 @@ function TransactionList(props) {
   }
   
   useEffect(() => {
-    axiosInstance.get(`api/creditcardsforfirstaccount/`)
+    axiosInstance.get('api/accounts/' + accountId + '/creditcards/')
       // .then(handleErrors)
       .then(response => {
         console.log('loaded credit cards');
