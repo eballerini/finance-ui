@@ -12,6 +12,7 @@ import Categories from './components/Categories';
 import CreditCards from './components/CreditCards';
 import Dashboard from './components/Dashboard';
 import Hello from './components/Hello';
+import ImportTransactions from './components/ImportTransactions';
 import Login from './components/Login';
 import Nav from './components/Nav';
 import SignupForm from './components/SignupForm';
@@ -125,6 +126,7 @@ class App extends Component {
                       <li><Link className={"nav-link"} to={"/accounts/"}>Accounts</Link></li>
                       <li><Link className={"nav-link"} to={"/categories/"}>Categories</Link></li>
                       <li><Link className={"nav-link"} to={"/creditcards/"}>Credit Cards</Link></li>
+                      <li><Link className={"nav-link"} to={"/import/"}>Import transactions</Link></li>
                       <li><Link className={"nav-link"} to={"/login/"}>Login</Link></li>
                     </ul>
                     <button onClick={this.handleLogout}>Logout</button>
@@ -141,6 +143,7 @@ class App extends Component {
                     <Route exact path={"/creditcards/"} component={CreditCards}/>
                     <Route exact path={"/accounts/:id/creditcards/"} component={CreditCards}/>
                     <Route exact path={"/accounts/:accountId/transactions/"} component={TransactionsAPI}/>
+                    <Route exact path={"/import/"} component={ImportTransactions}/>
                     <Route path={"/"} render={() => <div>Home again</div>}/>
                </Switch>
            </main>
