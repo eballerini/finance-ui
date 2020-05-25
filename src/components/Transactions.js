@@ -3,9 +3,11 @@ import { formatDate, convertToString } from '../utils';
 
 import axiosInstance from '../axiosApi';
 
-function TransactionList(props) {  
-  const defaultDateAdded = convertToString(new Date());
+function TransactionList(props) {
+  const transactionList = props.transactions;
+  const accountId = props.accountId;
   
+  const defaultDateAdded = convertToString(new Date());
   const [creditCards, setCreditCards] = useState([]);
   const [categories, setCategories] = useState([]);
   
@@ -80,7 +82,7 @@ function TransactionList(props) {
       credit_card: creditCard,
       category: category,
     }
-    axiosInstance.post('api/transactions/', payload)
+    axiosInstance.post('api/accounts/' + accountId + '/transactions/', payload)
     // .then(async response => {
     //       const data = await response.json();
     // 
@@ -137,7 +139,7 @@ function TransactionList(props) {
       }
     }
     console.log(payload);
-    axiosInstance.put('api/transactions/' + transaction_id + '/', payload)
+    axiosInstance.put('api/accounts/' + accountId + '/transactions/' + transaction_id + '/', payload)
     .then(
         result => {
           console.log('success: transaction updated');
@@ -156,7 +158,7 @@ function TransactionList(props) {
     event.preventDefault();
     const payload = {};
     console.log(payload);
-    axiosInstance.delete('api/transactions/' + transaction_id + '/', payload)
+    axiosInstance.delete('api/accounts/' + accountId + '/transactions/' + transaction_id + '/', payload)
     .then(
         result => {
           console.log('success: transaction updated');
@@ -170,8 +172,6 @@ function TransactionList(props) {
           // this.setState({ errorMessage: error });
       });
   }
-
-  const transactionList = props.transactions;
   
   const paymentMethods = {
     'CC': 'Credit Card',

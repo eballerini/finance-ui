@@ -125,7 +125,6 @@ class App extends Component {
                       <li><Link className={"nav-link"} to={"/accounts/"}>Accounts</Link></li>
                       <li><Link className={"nav-link"} to={"/categories/"}>Categories</Link></li>
                       <li><Link className={"nav-link"} to={"/creditcards/"}>Credit Cards</Link></li>
-                      <li><Link className={"nav-link"} to={"/transactions/"}>Transactions</Link></li>
                       <li><Link className={"nav-link"} to={"/login/"}>Login</Link></li>
                     </ul>
                     <button onClick={this.handleLogout}>Logout</button>
@@ -141,56 +140,13 @@ class App extends Component {
                     <Route exact path={"/categories/"} component={Categories}/>
                     <Route exact path={"/creditcards/"} component={CreditCards}/>
                     <Route exact path={"/accounts/:id/creditcards/"} component={CreditCards}/>
-                    <Route exact path={"/transactions/"} component={TransactionsAPI}/>
+                    <Route exact path={"/accounts/:accountId/transactions/"} component={TransactionsAPI}/>
                     <Route path={"/"} render={() => <div>Home again</div>}/>
                </Switch>
            </main>
         </div>
     );
   }
-}
-
-function Menu(props) {
-  return (
-    <Router>
-      <div className="row">
-        <div className="column side">
-          Hello, {props.username}
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/accounts">Accounts</Link>
-              </li>
-              <li>
-                <Link to="/transactions">Transactions</Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <div className="column middle">
-        <Switch>
-          <Route path="/accounts">
-            <AccountsAPI />
-          </Route>
-          {/*TODO change this to /accounts/:account_id/transactions */}
-          <Route path="/transactions">
-            <TransactionsAPI />
-          </Route>
-          {/*<Route path="/">
-            <Home />
-          </Route>*/}
-        </Switch>
-        </div>
-      </div>
-    </Router>
-  );
 }
 
 export default withRouter(App);

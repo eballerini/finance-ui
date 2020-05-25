@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import '../App.css';
 import TransactionList from './Transactions.js';
 
@@ -9,8 +10,10 @@ function TransactionsAPI() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   
+  const { accountId } = useParams();
+  
   useEffect(() => {
-    axiosInstance.get(`api/transactions/`)
+    axiosInstance.get(`api/accounts/` + accountId + `/transactions/`)
       .then(response => {
         console.log('transactions loaded');
         setTransactions(response.data);
@@ -28,7 +31,10 @@ function TransactionsAPI() {
   return (
     <div className="">
       <div>
-        <TransactionList transactions={transactions}/>
+        <TransactionList 
+          accountId={accountId}
+          transactions={transactions}
+        />
         {isLoading && <p>Loading transactions</p>}
         {isError && <p>Error loading transactions</p>}
       </div>
