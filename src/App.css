@@ -83,6 +83,16 @@ table.input_form td {
   margin-bottom: 20px;
 }
 
+.import-transactions table {
+  border-collapse: collapse;
+  border-style: hidden;
+}
+
+.import-transactions td {
+  border-collapse: collapse;
+  border-style: hidden;
+}
+
 .buttons {
   margin-bottom: 20px;
 }
