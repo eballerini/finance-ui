@@ -148,8 +148,12 @@ function ImportTransactionsForm(props) {
        loadTransactions(res.data.transaction_import_id);
      })
      .catch(error => {
-       console.log(error);
-       setMessage("error");
+       console.log(error.response);
+       if (error.response) {
+          setMessage("Error importing transactions: " + error.response.data.reason);
+       } else {
+          setMessage("Error importing transactions");
+       }
      })
   }
   
