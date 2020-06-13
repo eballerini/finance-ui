@@ -14,7 +14,9 @@ function Dashboard(props) {
         console.log('loaded dashboard');
         setNumCreditCardsOpened(response.data.num_credit_cards_opened);
         setFirstYearFees(response.data.first_year_fees);
-        setLastApprovalDate(response.data.last_approval_date);
+        if (response.data.last_approval_date != null) {
+            setLastApprovalDate(response.data.last_approval_date);
+        }
       })
       .catch(error => console.log(error));
   }, []);
