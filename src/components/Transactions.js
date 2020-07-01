@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { formatDate, convertToString } from '../utils';
+import { formatAmount, formatDate, convertToString } from '../utils';
 
 import axiosInstance from '../axiosApi';
 
@@ -291,7 +291,7 @@ function showTransactions(transactions, paymentMethods, isEditable, setRowNumber
     <tr key={index}>
       <td>{ transaction.id }</td>
       <td>{transaction.description}</td>
-      <td>${ transaction.amount }</td>
+      <td>{formatAmount(transaction.amount)}</td>
       <td>{formatDate(transaction.date_added)}</td>
       <td>{ paymentMethods[transaction.payment_method_type] }</td>
       <td>{ transaction.credit_card ? transaction.credit_card.name : '' }</td>

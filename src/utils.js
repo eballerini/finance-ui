@@ -58,9 +58,12 @@ export function formatSignupBonus(number) {
 }
 
 function formatNumber(number, prefix = '') {
-  var formattedNumber;
+  var formattedNumber = '';
   if (number) {
-    formattedNumber = prefix + Number(number).toLocaleString();
+    if (number < 0) {
+      formattedNumber = '- ';
+    }
+    formattedNumber += prefix + Math.abs(Number(number)).toLocaleString();
   } else {
     formattedNumber = '';
   }
