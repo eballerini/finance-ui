@@ -74,6 +74,7 @@ function ReportTable(props) {
 }
 
 function Report(props) {
+  const [year, setYear] = useState(2020);
   const [expensesByMonth, setExpensesByMonth] = useState([]);
   const [totals, setTotals] = useState({});
   const [grandTotal, setGrandTotal] = useState();
@@ -114,12 +115,26 @@ function Report(props) {
      setGrandTotal(d.grandTotal);
   }, []);
   
+  function switchYear(event) {
+    setYear(event.target.value);
+    // TODO get data for the new year
+  }
+  
   return (
     <div>
       <div className="title">
         <h1>Report</h1>
       </div>
       <div>
+        <h2>Year: {year}</h2>
+        <div>
+          Change year:
+          <select name="year" onChange={(event) => switchYear(event)}>
+            <option key="2020" value="2020">2020</option>
+            <option key="2019" value="2019">2019</option>
+            <option key="2018" value="2018">2018</option>
+          </select>
+        </div>
         <ReportTable 
           expensesByMonth={expensesByMonth}
           totals={totals}
