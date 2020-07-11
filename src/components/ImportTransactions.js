@@ -150,7 +150,8 @@ function ImportTransactionsForm(props) {
      .catch(error => {
        console.log(error.response);
        if (error.response) {
-          setMessage("Error importing transactions: " + error.response.data.reason);
+         const data = error.response.data;
+          setMessage("Error importing transactions: " + data[Object.keys(data)[0]]);
        } else {
           setMessage("Error importing transactions");
        }
