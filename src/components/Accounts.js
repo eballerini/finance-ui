@@ -25,6 +25,7 @@ function showAccounts(accounts) {
       <td>{ account.name }</td>
       <td>{ account.currency_code }</td>
       <td><a href={"/accounts/" + account.id + "/transactions/"} >View transactions</a></td>
+      <td><a href={"/accounts/" + account.id + "/report/"} >View report</a></td>
     </tr>
   );
   
@@ -36,6 +37,7 @@ function showAccounts(accounts) {
             <th>Id</th>
             <th>Name</th>
             <th>Currency</th>
+            <th></th>
             <th></th>
           </tr>
         </thead>

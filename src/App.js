@@ -15,6 +15,7 @@ import Hello from './components/Hello';
 import ImportTransactions from './components/ImportTransactions';
 import Login from './components/Login';
 import Nav from './components/Nav';
+import Report from './components/Report';
 import SignupForm from './components/SignupForm';
 import TransactionsAPI from './components/TransactionsAPI';
 
@@ -143,6 +144,7 @@ class App extends Component {
                     <Route exact path={"/creditcards/"} component={CreditCards}/>
                     <Route exact path={"/accounts/:id/creditcards/"} component={CreditCards}/>
                     <Route exact path={"/accounts/:accountId/transactions/"} component={TransactionsAPI}/>
+                    <Route exact path={"/accounts/:accountId/report/"} component={Report}/>
                     <Route exact path={"/import/"} component={ImportTransactions}/>
                     <Route path={"/"} render={() => <div>Home again</div>}/>
                </Switch>
