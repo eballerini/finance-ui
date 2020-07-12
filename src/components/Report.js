@@ -1,5 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react';
 
+import { formatAmount } from '../utils';
+
 function ReportTableHeader() {
   return (
     <thead>
@@ -27,19 +29,19 @@ function ReportTable(props) {
   const expensesByMonth = props.expensesByMonth.map((expenseByMonth, index) => 
     <tr key={index}>
       <td>{expenseByMonth.name}</td>
-      <td>{expenseByMonth.data[1]}</td>
-      <td>{expenseByMonth.data[2]}</td>
-      <td>{expenseByMonth.data[3]}</td>
-      <td>{expenseByMonth.data[4]}</td>
-      <td>{expenseByMonth.data[5]}</td>
-      <td>{expenseByMonth.data[6]}</td>
-      <td>{expenseByMonth.data[7]}</td>
-      <td>{expenseByMonth.data[8]}</td>
-      <td>{expenseByMonth.data[9]}</td>
-      <td>{expenseByMonth.data[10]}</td>
-      <td>{expenseByMonth.data[11]}</td>
-      <td>{expenseByMonth.data[12]}</td>
-      <td>{expenseByMonth.total}</td>
+      <td>{formatAmount(expenseByMonth.data[1])}</td>
+      <td>{formatAmount(expenseByMonth.data[2])}</td>
+      <td>{formatAmount(expenseByMonth.data[3])}</td>
+      <td>{formatAmount(expenseByMonth.data[4])}</td>
+      <td>{formatAmount(expenseByMonth.data[5])}</td>
+      <td>{formatAmount(expenseByMonth.data[6])}</td>
+      <td>{formatAmount(expenseByMonth.data[7])}</td>
+      <td>{formatAmount(expenseByMonth.data[8])}</td>
+      <td>{formatAmount(expenseByMonth.data[9])}</td>
+      <td>{formatAmount(expenseByMonth.data[10])}</td>
+      <td>{formatAmount(expenseByMonth.data[11])}</td>
+      <td>{formatAmount(expenseByMonth.data[12])}</td>
+      <td>{formatAmount(expenseByMonth.total)}</td>
     </tr>
   );
   const totals = props.totals;
@@ -53,19 +55,19 @@ function ReportTable(props) {
           {expensesByMonth}
           <tr>
             <td>TOTAL</td>
-            <td>{totals[1]}</td>
-            <td>{totals[2]}</td>
-            <td>{totals[3]}</td>
-            <td>{totals[4]}</td>
-            <td>{totals[5]}</td>
-            <td>{totals[6]}</td>
-            <td>{totals[7]}</td>
-            <td>{totals[8]}</td>
-            <td>{totals[9]}</td>
-            <td>{totals[10]}</td>
-            <td>{totals[11]}</td>
-            <td>{totals[12]}</td>
-            <td>{grandTotal}</td>
+            <td>{formatAmount(totals[1])}</td>
+            <td>{formatAmount(totals[2])}</td>
+            <td>{formatAmount(totals[3])}</td>
+            <td>{formatAmount(totals[4])}</td>
+            <td>{formatAmount(totals[5])}</td>
+            <td>{formatAmount(totals[6])}</td>
+            <td>{formatAmount(totals[7])}</td>
+            <td>{formatAmount(totals[8])}</td>
+            <td>{formatAmount(totals[9])}</td>
+            <td>{formatAmount(totals[10])}</td>
+            <td>{formatAmount(totals[11])}</td>
+            <td>{formatAmount(totals[12])}</td>
+            <td>{formatAmount(grandTotal)}</td>
           </tr>
         </tbody>
       </table>
