@@ -2,23 +2,21 @@ import React, { useEffect, useState, Fragment } from 'react';
 
 import { formatAmount } from '../utils';
 
+import CanvasJSReact from '../canvasjs.react';
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 function ReportTableHeader() {
+  const months = MONTHS.map((month, index) =>
+    <th key={index}>{month}</th>
+  )
+  
   return (
     <thead>
       <tr>
         <th>Category</th>
-        <th>January</th>
-        <th>February</th>
-        <th>March</th>
-        <th>April</th>
-        <th>May</th>
-        <th>June</th>
-        <th>July</th>
-        <th>August</th>
-        <th>September</th>
-        <th>October</th>
-        <th>November</th>
-        <th>December</th>
+        {months}
         <th>TOTAL</th>
       </tr>
     </thead>
@@ -71,6 +69,31 @@ function ReportTable(props) {
           </tr>
         </tbody>
       </table>
+    </div>
+  );
+}
+
+function ReportViz(props) {
+  
+  const data = MONTHS.map((month, index) => 
+    ({ label: month, y: props.totals[index + 1] })
+  );
+  
+  const options = {
+    title: {
+      text: "Expenses by month"
+    },
+    data: [{				
+      type: "column",
+      dataPoints: data
+    }]
+  }
+  
+  return (
+    <div>
+      <CanvasJSChart options = {options}
+            /* onRef = {ref => this.chart = ref} */
+        />
     </div>
   );
 }
@@ -142,6 +165,7 @@ function Report(props) {
           totals={totals}
           grandTotal={grandTotal}
           />
+        <ReportViz totals={totals}/>
       </div>
     </div>
   );
