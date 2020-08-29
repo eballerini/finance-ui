@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.report-table {
+  margin-bottom: 20px;
+}
+
+.report-viz-monthly {
+  margin-bottom: 20px;
+}
