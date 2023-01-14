@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8080/expense/',
+    baseURL: process.env.REACT_APP_API_URL,
     timeout: 5000,
     headers: {
         'Authorization': "JWT " + localStorage.getItem('access_token'),

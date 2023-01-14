@@ -55,7 +55,7 @@ class App extends Component {
 
   componentDidMount() {
     if (this.state.logged_in) {
-      fetch('http://localhost:8080/expense/current_user/', {
+      fetch(process.env.REACT_APP_API_URL + 'current_user/', {
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`
         }
@@ -94,7 +94,7 @@ class App extends Component {
 
   handle_signup = (e, data) => {
     e.preventDefault();
-    fetch('http://localhost:8080/expense/users/', {
+    fetch(process.env.REACT_APP_API_URL + 'users/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
